@@ -1,0 +1,104 @@
+[
+  {
+    "canonical_term": "Input Tax Credit",
+    "variants": ["ITC", "itc", "input credit", "tax credit", "ઈનપુટ ટેક્સ ક્રેડિટ", "ઇનપુટ ક્રેડિટ", "જમા કર", "इनपुट टैक्स क्रेडिट", "इनपुट क्रेडिट"],
+    "language": "gu",
+    "definition": "Credit availed on taxes paid on purchase of inputs, capital goods, and services used in furtherance of business."
+  },
+  {
+    "canonical_term": "Reverse Charge Mechanism",
+    "variants": ["RCM", "rcm", "reverse charge", "રિવર્સ ચાર્જ", "આરસીએમ", "ઉલટો કર", "रिवर्स चार्ज", "आरसीएम"],
+    "language": "gu",
+    "definition": "Liability to pay tax by the recipient of supply of goods or services instead of the supplier."
+  },
+  {
+    "canonical_term": "Job Work",
+    "variants": ["job work", "jobwork", "job-work", "જોબ વર્ક", "જોબવર્ક", "કારીગરી કામ", "પ્રોસેસિંગ કામ", "जॉब वर्क", "जॉबवर्क", "मजदूरी काम"],
+    "language": "gu",
+    "definition": "Undertaking any treatment or process on goods belonging to another registered person under Section 2(68) of CGST Act."
+  },
+  {
+    "canonical_term": "Composition Scheme",
+    "variants": ["composition", "composition scheme", "samadhan yojana", "સમાધાન યોજના", "કોમ્પોઝીશન સ્કીમ", "કોમ્પોઝિશન", "कंपोजीशन स्कीम", "समाधान योजना"],
+    "language": "gu",
+    "definition": "Simplified tax payment mechanism under Section 10 of CGST Act for eligible small taxpayers at fixed turnover percentage."
+  },
+  {
+    "canonical_term": "E-Way Bill",
+    "variants": ["eway bill", "e-way bill", "ewaybill", "ewb", "ઈ-વે બિલ", "ઈવે બિલ", "ઈવેબિલ", "ई-वे बिल", "ईवे बिल"],
+    "language": "gu",
+    "definition": "Electronically generated compliance document for movement of goods valued above ₹50,000 under Rule 138."
+  },
+  {
+    "canonical_term": "E-Invoicing",
+    "variants": ["einvoice", "e-invoice", "e-invoicing", "einvoicing", "ઈ-ઈન્વોઇસ", "ઇ-બિલ", "ઈન્વોઈસિંગ", "ई-इन्वॉयस", "ई-चालान"],
+    "language": "gu",
+    "definition": "Electronic reporting and authentication of B2B invoices on the GST Invoice Registration Portal (IRP)."
+  },
+  {
+    "canonical_term": "Udyam Registration",
+    "variants": ["udyam", "udyam registration", "msme certificate", "udyam portal", "ઉદ્યમ", "ઉદ્યમ નોંધણી", "એમએસએમઈ સર્ટિફિકેટ", "ઉદ્યોગ આધાર", "उद्यम रजिस्ट्रेशन", "एमएसएमई पंजीकरण"],
+    "language": "gu",
+    "definition": "Official Government portal and registration process for MSME enterprise recognition under MSMED Act."
+  },
+  {
+    "canonical_term": "Delayed Payment",
+    "variants": ["delayed payment", "late payment", "45 days payment", "પેમેન્ટ વિલંબ", "મોડું પેમેન્ટ", "૪૫ દિવસનું પેમેન્ટ", "રૂપિયા બાકી", "લેણાં", "देरी से भुगतान", "विलंबित भुगतान", "45 दिन का नियम"],
+    "language": "gu",
+    "definition": "Mandatory timeline under Section 15 of MSMED Act requiring buyers to clear micro/small supplier dues within 45 days."
+  },
+  {
+    "canonical_term": "Section 43B(h)",
+    "variants": ["43B(h)", "section 43b", "43b clause h", "ઇનકમટેક્સ ૪૩બી", "૪૩બી(એચ)", "ખર્ચ બાદ ન મળવો", "धारा 43बी(एच)", "43बी का नियम"],
+    "language": "gu",
+    "definition": "Income Tax provision disallowing deductions for payments owed to micro and small enterprises not settled within MSMED timelines."
+  },
+  {
+    "canonical_term": "Goods Transport Agency",
+    "variants": ["GTA", "gta", "transport service", "transporter", "ટ્રાન્સપોર્ટર", "જીટીએ", "માલવાહક સેવા", "ભાડું", "ट्रांसपोर्टर", "जीटीए"],
+    "language": "gu",
+    "definition": "Commercial service of goods transportation by road issuing a consignment note, often governed by RCM."
+  },
+  {
+    "canonical_term": "Delivery Challan",
+    "variants": ["delivery challan", "challan", "job work challan", "ચલણ", "ડિલિવરી ચલણ", "જોબ વર્ક ચલણ", "કાચું બિલ", "डिलीवरी चालान", "चालान"],
+    "language": "gu",
+    "definition": "Document issued under Rule 55 for movement of goods for job work, exhibition, or other reasons without immediate sale."
+  },
+  {
+    "canonical_term": "150000",
+    "variants": ["dedh lakh", "1.5 lakh", "150000", "દોઢ લાખ", "૧૫૦૦૦૦", "૧.૫ લાખ", "डेढ़ लाख"],
+    "language": "gu",
+    "definition": "Vernacular numeric representation for one lakh fifty thousand (1,50,000)."
+  },
+  {
+    "canonical_term": "15000000",
+    "variants": ["dedh crore", "1.5 crore", "1.5 cr", "15000000", "દોઢ કરોડ", "૧૫૦૦૦૦૦૦", "૧.૫ કરોડ", "डेढ़ करोड़"],
+    "language": "gu",
+    "definition": "Vernacular numeric representation for one crore fifty lakhs (1,50,00,000) — Composition threshold."
+  },
+  {
+    "canonical_term": "4000000",
+    "variants": ["chalis lakh", "40 lakh", "40L", "4000000", "ચાલીસ લાખ", "૪૦ લાખ", "૪૦૦૦૦૦૦", "चालीस लाख"],
+    "language": "gu",
+    "definition": "Vernacular numeric representation for forty lakhs (40,00,000) — Goods GST registration exemption limit."
+  },
+  {
+    "canonical_term": "5%",
+    "variants": ["5%", "paanch takka", "5 takka", "5 percent", "પાંચ ટકા", "૫%", "૫ ટકા", "पांच प्रतिशत", "5 प्रतिशत"],
+    "language": "gu",
+    "definition": "Tax percentage rate (5%) applicable to textile job work, essential commodities, and transport."
+  },
+  {
+    "canonical_term": "12%",
+    "variants": ["12%", "baar takka", "12 takka", "12 percent", "બાર ટકા", "૧૨%", "૧૨ ટકા", "बारह प्रतिशत", "12 प्रतिशत"],
+    "language": "gu",
+    "definition": "Tax percentage rate (12%) applicable to registered job work and intermediate manufacturing goods."
+  },
+  {
+    "canonical_term": "18%",
+    "variants": ["18%", "adhaar takka", "18 takka", "18 percent", "અઢાર ટકા", "૧૮%", "૧૮ ટકા", "अठारह प्रतिशत", "18 प्रतिशत"],
+    "language": "gu",
+    "definition": "Standard service tax rate (18%) and rate for job work performed for unregistered principals."
+  }
+]
