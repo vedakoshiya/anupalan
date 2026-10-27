@@ -1,0 +1,140 @@
+# ==============================================================================
+# Security & Secrets (CRITICAL: NEVER COMMIT SECRETS TO PUBLIC REPOSITORIES)
+# ==============================================================================
+.env
+.env.*
+!.env.example
+secrets/
+credentials/
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+
+# Cloud and Provider Credentials
+.aws/
+.gcp/
+.azure/
+*service_account*.json
+credentials.json
+token.json
+
+# ==============================================================================
+# Python Artifacts & Virtual Environments
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Testing, Coverage & Linters
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ==============================================================================
+# Local Data, Raw Documents, Scraped Artifacts, and Caches
+# ==============================================================================
+# Raw crawled documents and PDFs may contain copyrighted or sensitive documents
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/cache/*
+!data/cache/.gitkeep
+data/ocr_cache/*
+!data/ocr_cache/.gitkeep
+data/embeddings_cache/*
+!data/embeddings_cache/.gitkeep
+
+# Local database instances & exports
+*.sqlite3
+*.db
+*.dump
+*.sql.gz
+postgres-data/
+qdrant-storage/
+opensearch-data/
+
+# User query traces, metrics & logs (May contain PII under DPDP Act)
+traces/
+logs/
+*.log
+*.log.*
+otel-traces/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# ==============================================================================
+# Node.js & Web UI Artifacts
+# ==============================================================================
+web/node_modules/
+node_modules/
+web/.next/
+web/out/
+web/build/
+web/dist/
+.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==============================================================================
+# IDE, OS & System Files
+# ==============================================================================
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
