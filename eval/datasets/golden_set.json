@@ -1,0 +1,167 @@
+[
+  {
+    "id": "GOLD-001",
+    "query": "Job work par GST kevi rite lage?",
+    "language": "gu",
+    "query_type": "single_hop",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-GST-JW-001", "INST-GST-JW-002"],
+    "gold_keywords": ["job work", "textile", "5%"],
+    "expected_numbers": ["5%"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-002",
+    "query": "કાપડ અને યાર્ન ના જોબ વર્ક પર જીએસટી નો દર કેટલો છે?",
+    "language": "gu",
+    "query_type": "single_hop",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-GST-JW-002"],
+    "gold_keywords": ["ટેક્સટાઇલ", "જોબ વર્ક", "5%"],
+    "expected_numbers": ["5%"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-003",
+    "query": "कपड़ा और यार्न के जॉब वर्क पर जीएसटी की दर क्या है?",
+    "language": "hi",
+    "query_type": "single_hop",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-GST-JW-002"],
+    "gold_keywords": ["जॉब वर्क", "5%"],
+    "expected_numbers": ["5%"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-004",
+    "query": "What is the GST rate for registered textile job work?",
+    "language": "en",
+    "query_type": "single_hop",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-GST-JW-002"],
+    "gold_keywords": ["textile", "job work", "5%"],
+    "expected_numbers": ["5%"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-005",
+    "query": "Composition scheme ma turnover limit ketli che?",
+    "language": "gu",
+    "query_type": "temporal",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-GST-COMP-003", "INST-GST-COMP-004"],
+    "gold_keywords": ["composition", "15000000", "1.5 crore"],
+    "expected_numbers": ["15000000"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-006",
+    "query": "2018 ma composition scheme ni limit shu hati?",
+    "language": "gu",
+    "query_type": "temporal",
+    "as_of": "2018-01-01",
+    "gold_instruments": ["INST-GST-COMP-002"],
+    "gold_keywords": ["composition", "75 lakh"],
+    "expected_numbers": ["75"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-007",
+    "query": "MSME delayed payment ma 45 divas no niyam shu che?",
+    "language": "gu",
+    "query_type": "single_hop",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-MSME-DELAY-001"],
+    "gold_keywords": ["section 15", "45", "payment"],
+    "expected_numbers": ["45"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-008",
+    "query": "MSMED Act Section 16 ma delayed payment par ketlu vyaj lage?",
+    "language": "gu",
+    "query_type": "single_hop",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-MSME-DELAY-002"],
+    "gold_keywords": ["interest", "three times", "rbi bank rate"],
+    "expected_numbers": ["3"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-009",
+    "query": "MSME ke liye Section 43B(h) me kya provision hai?",
+    "language": "hi",
+    "query_type": "single_hop",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-MSME-IT-001"],
+    "gold_keywords": ["43B(h)", "income tax", "delayed payment"],
+    "expected_numbers": ["45"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-010",
+    "query": "E-invoicing applicability threshold ketlo che?",
+    "language": "gu",
+    "query_type": "single_hop",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-GST-ITC-008", "INST-GST-ITC-009"],
+    "gold_keywords": ["e-invoicing", "5 crore", "50000000"],
+    "expected_numbers": ["50000000"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-011",
+    "query": "Gujarat MSME policy 2020 ma Category 3 taluka ma ketli capital subsidy male?",
+    "language": "gu",
+    "query_type": "single_hop",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-GUJ-POLICY-002"],
+    "gold_keywords": ["capital subsidy", "category 3", "25%"],
+    "expected_numbers": ["25%"],
+    "requires_abstention": false
+  },
+  {
+    "id": "GOLD-012",
+    "query": "Mara pase 40 lakh turnover che, mane shu karvu pade?",
+    "language": "gu",
+    "query_type": "ambiguous",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-GST-COMP-005"],
+    "gold_keywords": ["registration", "goods", "services"],
+    "expected_numbers": ["4000000"],
+    "requires_abstention": true
+  },
+  {
+    "id": "GOLD-013",
+    "query": "Mane personal income tax ketlo bharvo pade?",
+    "language": "gu",
+    "query_type": "out_of_corpus",
+    "as_of": "2026-10-27",
+    "gold_instruments": [],
+    "gold_keywords": [],
+    "expected_numbers": [],
+    "requires_abstention": true
+  },
+  {
+    "id": "GOLD-014",
+    "query": "Supreme Court ma appeal kevi rite karvi?",
+    "language": "gu",
+    "query_type": "out_of_corpus",
+    "as_of": "2026-10-27",
+    "gold_instruments": [],
+    "gold_keywords": [],
+    "expected_numbers": [],
+    "requires_abstention": true
+  },
+  {
+    "id": "GOLD-015",
+    "query": "Shops and Establishments Act Gujarat ma ketla workers sudhi registration ma chhoot male?",
+    "language": "gu",
+    "query_type": "single_hop",
+    "as_of": "2026-10-27",
+    "gold_instruments": ["INST-GUJ-LABOUR-001"],
+    "gold_keywords": ["shops", "10", "workers"],
+    "expected_numbers": ["10"],
+    "requires_abstention": false
+  }
+]

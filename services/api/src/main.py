@@ -71,7 +71,20 @@ def ask_question(request: AskRequest):
     target_lang = request.language or detected.primary_language
     normalized_query = normalizer.normalize(request.query)
 
-    # 2. Hybrid Retrieval with temporal filter
+    # 2. Scope, injection, and ambiguity safety gating
+    must_abstain, reason = abstention_engine.should_abstain(
+        query=request.query,
+        normalized_query=normalized_query,
+    )
+    if must_abstain:
+        return abstention_engine.create_abstention_response(
+            language=target_lang,
+            as_of=request.as_of,
+            corpus_updated=CORPUS_LAST_UPDATED,
+            reason=reason,
+        )
+
+    # 3. Hybrid Retrieval with temporal filter
     retriever = get_retriever()
     scored_candidates = retriever.retrieve(
         query=normalized_query,
@@ -79,12 +92,13 @@ def ask_question(request: AskRequest):
         top_k=8,
     )
 
-    # 3. Confidence & Abstention check
-    if not scored_candidates or scored_candidates[0].rrf_score <= 0.0:
+    # 4. Confidence & Abstention check on evidence strength
+    if not scored_candidates or scored_candidates[0].rrf_score <= 0.012:
         return abstention_engine.create_abstention_response(
             language=target_lang,
             as_of=request.as_of,
             corpus_updated=CORPUS_LAST_UPDATED,
+            reason="insufficient_evidence",
         )
 
     # 4. Synthesize Claims from top retrieved passage

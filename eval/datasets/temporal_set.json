@@ -1,0 +1,59 @@
+[
+  {
+    "id": "TEMP-001",
+    "topic": "Composition Scheme Turnover Limit",
+    "query": "Composition scheme ma limit ketli che?",
+    "evaluations": [
+      {
+        "as_of": "2018-06-01",
+        "expected_instrument": "INST-GST-COMP-002",
+        "expected_value": "75 Lakhs",
+        "expected_numbers": ["75"]
+      },
+      {
+        "as_of": "2024-01-01",
+        "expected_instrument": "INST-GST-COMP-003",
+        "expected_value": "1.5 Crore",
+        "expected_numbers": ["15000000"]
+      }
+    ]
+  },
+  {
+    "id": "TEMP-002",
+    "topic": "E-Invoicing Applicability Threshold",
+    "query": "E-invoicing applicability threshold ketlo che?",
+    "evaluations": [
+      {
+        "as_of": "2021-01-01",
+        "expected_instrument": "INST-GST-ITC-008",
+        "expected_value": "100 Crore / 50 Crore",
+        "expected_numbers": ["500000000"]
+      },
+      {
+        "as_of": "2024-01-01",
+        "expected_instrument": "INST-GST-ITC-009",
+        "expected_value": "5 Crore",
+        "expected_numbers": ["50000000"]
+      }
+    ]
+  },
+  {
+    "id": "TEMP-003",
+    "topic": "Textile Job Work Rate",
+    "query": "Textile job work rate ketlo che?",
+    "evaluations": [
+      {
+        "as_of": "2017-07-15",
+        "expected_instrument": "INST-GST-JW-001",
+        "expected_value": "18%",
+        "expected_numbers": ["18%"]
+      },
+      {
+        "as_of": "2017-09-01",
+        "expected_instrument": "INST-GST-JW-002",
+        "expected_value": "5%",
+        "expected_numbers": ["5%"]
+      }
+    ]
+  }
+]

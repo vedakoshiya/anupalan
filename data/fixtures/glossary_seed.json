@@ -100,5 +100,23 @@
     "variants": ["18%", "adhaar takka", "18 takka", "18 percent", "અઢાર ટકા", "૧૮%", "૧૮ ટકા", "अठारह प्रतिशत", "18 प्रतिशत"],
     "language": "gu",
     "definition": "Standard service tax rate (18%) and rate for job work performed for unregistered principals."
+  },
+  {
+    "canonical_term": "Textile",
+    "variants": ["textile", "textiles", "fabric", "yarn", "કાપડ", "યાર્ન", "ટેક્સટાઇલ", "કપડા", "कपड़ा", "यार्न", "टेक्सटाइल"],
+    "language": "gu",
+    "definition": "Textiles, fabrics, yarns and related commodities subject to special 5% job work GST rates."
+  },
+  {
+    "canonical_term": "GST",
+    "variants": ["gst", "જીએસટી", "જી એસ ટી", "जीएसटी"],
+    "language": "gu",
+    "definition": "Goods and Services Tax statutory framework."
+  },
+  {
+    "canonical_term": "Rate",
+    "variants": ["દર", "દર કેટલો", "દર શું છે", "દર શું", "દર જણાવો", "दर क्या है", "दर क्या", "दर"],
+    "language": "gu",
+    "definition": "Tax rate or applicable statutory tariff percentage."
   }
 ]

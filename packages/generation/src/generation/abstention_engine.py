@@ -1,5 +1,6 @@
 """Abstention engine for out-of-scope, low-confidence, or ambiguous queries."""
 
+import re
 from datetime import date
 from uuid import uuid4
 from packages.generation.src.generation.schemas import AskResponse
@@ -7,6 +8,39 @@ from packages.generation.src.generation.schemas import AskResponse
 
 class AbstentionEngine:
     """Produces structured abstention responses adhering to safety requirements."""
+
+    OUT_OF_SCOPE_PATTERNS = [
+        # Personal tax advice / individual savings
+        r"personal income tax",
+        r"bachat",
+        r"saving",
+        r"personal.*tax",
+        r"12 lakh par ketlo tax",
+        r"hu ketlu bachat",
+        r"income tax ma \d+ lakh",
+        # Litigation advice / court proceedings / fighting officers
+        r"viruddh case",
+        r"case kevi rite jiti",
+        r"high court",
+        r"supreme court",
+        r"officer viruddh",
+        r"court.*appeal",
+    ]
+
+    INJECTION_PATTERNS = [
+        r"ignore all",
+        r"ignore previous",
+        r"disregard all",
+        r"confirm that gst on all goods is 0%",
+        r"system prompt",
+        r"jailbreak",
+    ]
+
+    AMBIGUOUS_PATTERNS = [
+        r"mane shu karvu pade",
+        r"mujhe kya karna hoga",
+        r"what should i do",
+    ]
 
     ABSTENTION_MESSAGES = {
         "gu": {
@@ -38,11 +72,38 @@ class AbstentionEngine:
         }
     }
 
+    def should_abstain(self, query: str, normalized_query: str = "") -> tuple[bool, str]:
+        """Classifies if query must abstain due to policy, scope, injection, or ambiguity."""
+        q_lower = (query + " " + normalized_query).lower()
+
+        # 1. Prompt Injection
+        for pat in self.INJECTION_PATTERNS:
+            if re.search(pat, q_lower):
+                return True, "prompt_injection"
+
+        # 2. Out-of-Scope (Personal tax, court litigation)
+        for pat in self.OUT_OF_SCOPE_PATTERNS:
+            if re.search(pat, q_lower):
+                return True, "out_of_scope"
+
+        # 3. High Ambiguity (Missing required slots)
+        for pat in self.AMBIGUOUS_PATTERNS:
+            if re.search(pat, q_lower):
+                has_turnover = "turnover" in q_lower or "4000000" in q_lower or "40 lakh" in q_lower
+                has_goods_or_services = "goods" in q_lower or "service" in q_lower or "maal" in q_lower or "seva" in q_lower
+                if has_turnover and not has_goods_or_services:
+                    return True, "ambiguous_missing_slots"
+                elif not has_goods_or_services:
+                    return True, "ambiguous_missing_slots"
+
+        return False, ""
+
     def create_abstention_response(
         self,
         language: str,
         as_of: date,
         corpus_updated: date,
+        reason: str | None = None,
     ) -> AskResponse:
         """Constructs an AskResponse marked as abstained."""
         lang_key = language if language in self.ABSTENTION_MESSAGES else "en"

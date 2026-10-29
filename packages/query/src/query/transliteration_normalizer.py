@@ -28,6 +28,13 @@ class TransliterationNormalizer:
 
     def __init__(self, glossary_fixture_path: Path | None = None):
         self.glossary_map: dict[str, str] = {}
+        self.sorted_variants: list[str] = []
+        if glossary_fixture_path is None:
+            # Default to canonical data fixture path if present
+            default_path = Path(__file__).resolve().parents[4] / "data" / "fixtures" / "glossary_seed.json"
+            if default_path.exists():
+                glossary_fixture_path = default_path
+
         if glossary_fixture_path and glossary_fixture_path.exists():
             self._load_glossary(glossary_fixture_path)
 
@@ -39,6 +46,7 @@ class TransliterationNormalizer:
                     canonical = entry["canonical_term"]
                     for variant in entry.get("variants", []):
                         self.glossary_map[variant.lower().strip()] = canonical
+            self.sorted_variants = sorted(self.glossary_map.keys(), key=len, reverse=True)
         except Exception:
             pass
 
@@ -53,17 +61,14 @@ class TransliterationNormalizer:
         for pattern, replacement in self.VERNACULAR_NUMBERS.items():
             cleaned = re.sub(pattern, replacement, cleaned, flags=re.IGNORECASE)
 
-        # 2. Map known glossary variants
-        words = re.findall(r"[\w%]+|[^\w\s]", cleaned, re.UNICODE)
-        normalized_tokens: list[str] = []
-        for word in words:
-            lower_word = word.lower()
-            if lower_word in self.glossary_map:
-                normalized_tokens.append(self.glossary_map[lower_word])
-            else:
-                normalized_tokens.append(word)
+        # 2. Map known glossary variants (longest phrases first)
+        for variant in self.sorted_variants:
+            if variant in cleaned.lower():
+                # Word boundary match supporting Unicode scripts
+                pat = re.compile(rf"(?<![\w\u0A80-\u0AFF\u0900-\u097F]){re.escape(variant)}(?![\w\u0A80-\u0AFF\u0900-\u097F])", re.IGNORECASE | re.UNICODE)
+                cleaned = pat.sub(self.glossary_map[variant], cleaned)
 
-        normalized_query = " ".join(normalized_tokens)
-        # Clean extra spaces around punctuation
-        normalized_query = re.sub(r"\s+([?.!,])", r"\1", normalized_query)
-        return normalized_query
+        # 3. Clean spaces around punctuation
+        cleaned = re.sub(r"\s+", " ", cleaned).strip()
+        cleaned = re.sub(r"\s+([?.!,])", r"\1", cleaned)
+        return cleaned

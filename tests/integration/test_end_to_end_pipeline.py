@@ -147,6 +147,14 @@ class TestEndToEndPipeline(unittest.TestCase):
         for c in comp_new_chunks:
             CHUNKS_DB[c.id] = c
 
+    @classmethod
+    def tearDownClass(cls):
+        # Reset in-memory DBs to keep test suites hermetic
+        CHUNKS_DB.clear()
+        FEEDBACK_DB.clear()
+        VERSION_GRAPH.nodes.clear()
+        VERSION_GRAPH.edges.clear()
+
     def test_01_health_endpoint(self):
         """Verifies GET /v1/health returns healthy status and indexed chunk count."""
         data = health_check()
