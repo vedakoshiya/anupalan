@@ -77,4 +77,3 @@ ignore = ["E501"]
 minversion = "8.0"
 addopts = "-ra -q --cov=packages --cov=services"
 testpaths = ["tests"]
-asyncio_mode = "auto"
