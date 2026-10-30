@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anupalan (અનુપાલન / अनुपालन) - Multilingual Compliance Navigator for Indian MSMEs</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-icon">⚖️</div>
+        <div>
+          <h1 class="brand-title">Anupalan <span class="brand-vernacular">(અનુપાલન / अनुपालन)</span></h1>
+          <p class="brand-subtitle">Multilingual, Citation-Grounded Compliance Navigator for Indian MSMEs</p>
+        </div>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-success" id="corpus-status-badge">Corpus: Oct 2026</span>
+        <span class="badge badge-primary">DPDP Act 2023 Compliant</span>
+        <span class="badge badge-secondary">Gujarat & Central MSME</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main class="main-container">
+    <!-- Query Input Section -->
+    <section class="card query-card">
+      <h2 class="section-heading">Ask a Statutory Question</h2>
+      <p class="section-desc">Search regulatory circulars, notifications, and acts in Gujarati, Gujlish, Hindi, or English.</p>
+
+      <!-- Vernacular Example Chips -->
+      <div class="chips-container" id="sample-chips">
+        <span class="chip-label">Try asking:</span>
+        <button class="chip" data-query="Job work par GST kevi rite lage?" data-lang="gu">🧵 Job work par GST (Gujlish)</button>
+        <button class="chip" data-query="કમ્પોઝિશન સ્કીમ માટે ટર્નઓવર મર્યાદા શું છે?" data-lang="gu">🏪 કમ્પોઝિશન સ્કીમ લિમિટ (ગુજરાતી)</button>
+        <button class="chip" data-query="गुजरात एमएसएमई कैपिटल सब्सिडी के लिए पात्रता क्या है?" data-lang="hi">🏭 कैपिटल सब्सिडी पात्रता (हिन्दी)</button>
+        <button class="chip" data-query="What is the payment timeline to micro enterprises under Section 43B(h)?" data-lang="en">⏱️ Section 43B(h) 45-day rule (English)</button>
+      </div>
+
+      <form id="ask-form" class="ask-form">
+        <div class="form-group">
+          <label for="query-input" class="form-label">Compliance Query:</label>
+          <textarea id="query-input" class="query-textarea" rows="3" placeholder="e.g. Job work par 5% rate kyare apply thay? Or ask in Gujarati / Hindi / English..." required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label for="as-of-date" class="form-label">Reference Validity Date (as-of):</label>
+            <input type="date" id="as-of-date" class="form-input">
+            <small class="form-hint">Evaluates notifications active on this date</small>
+          </div>
+          <div class="form-col">
+            <label for="target-language" class="form-label">Response Language:</label>
+            <select id="target-language" class="form-select">
+              <option value="">Auto-Detect (સ્વતઃ / આપોઆપ)</option>
+              <option value="gu">Gujarati (ગુજરાતી / Gujlish)</option>
+              <option value="hi">Hindi (हिन्दी)</option>
+              <option value="en">English</option>
+            </select>
+            <small class="form-hint">Query transliteration handled automatically</small>
+          </div>
+          <div class="form-col form-actions">
+            <button type="submit" class="btn btn-primary" id="btn-submit">
+              <span id="btn-text">Search Compliance</span>
+              <span class="spinner hidden" id="btn-spinner"></span>
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-clear">Clear</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Results Section -->
+    <section class="card results-card hidden" id="results-section">
+      <div class="results-header">
+        <div class="status-tags">
+          <span class="badge" id="res-badge-grounding">Verified Grounding</span>
+          <span class="badge" id="res-badge-lang">Lang: EN</span>
+          <span class="badge" id="res-badge-as-of">As Of: 2026-10-26</span>
+        </div>
+        <div class="session-info">
+          <span class="text-muted" id="session-display">Session ID: --</span>
+        </div>
+      </div>
+
+      <!-- Abstention Notice (Conditional) -->
+      <div class="alert alert-warning hidden" id="abstention-banner">
+        <strong>Statutory Abstention Notice:</strong>
+        <p id="abstention-text"></p>
+      </div>
+
+      <!-- Synthesis Summary -->
+      <div class="summary-box" id="summary-container">
+        <h3 class="summary-title">Statutory Synthesis</h3>
+        <p class="summary-text" id="summary-text"></p>
+      </div>
+
+      <!-- Grounded Claims -->
+      <div class="claims-section">
+        <h3 class="claims-heading">Grounded Provisions & Verified Citations</h3>
+        <div class="claims-list" id="claims-list"></div>
+      </div>
+
+      <!-- Next Steps Checklist -->
+      <div class="next-steps-section" id="next-steps-container">
+        <h3 class="next-steps-title">Actionable Compliance Steps for MSME</h3>
+        <ul class="next-steps-list" id="next-steps-list"></ul>
+      </div>
+
+      <!-- Disclaimer Banner -->
+      <div class="disclaimer-banner">
+        <span class="disclaimer-icon">⚠️</span>
+        <span class="disclaimer-text" id="disclaimer-text">Informational statutory guidance only. Consult a registered CA for tax filing.</span>
+      </div>
+
+      <!-- Feedback Area -->
+      <div class="feedback-card">
+        <div class="feedback-prompt">Was this compliance answer helpful and accurate?</div>
+        <div class="feedback-controls">
+          <button class="btn btn-sm btn-outline-success" id="fb-up">👍 Yes, Helpful</button>
+          <button class="btn btn-sm btn-outline-danger" id="fb-down">👎 Report Issue</button>
+        </div>
+        <!-- Feedback Reason Drawer (Collapsible) -->
+        <div class="feedback-reason-box hidden" id="fb-reason-box">
+          <label for="fb-reason" class="form-label">Issue Reason:</label>
+          <select id="fb-reason" class="form-select form-select-sm">
+            <option value="incorrect_rate">Incorrect Tax Rate or Number</option>
+            <option value="outdated_rule">Outdated or Superseded Rule</option>
+            <option value="missing_clause">Missing Relevant Proviso/Clause</option>
+            <option value="unclear_language">Unclear Vernacular Translation</option>
+            <option value="unsupported_claim">Claim Not Supported by Cited Source</option>
+          </select>
+          <input type="text" id="fb-comment" class="form-input form-input-sm" placeholder="Optional notes for annotators...">
+          <button class="btn btn-sm btn-primary" id="fb-submit">Submit Feedback</button>
+        </div>
+        <div class="feedback-toast hidden" id="fb-toast">Thank you! Your feedback has been recorded for review.</div>
+      </div>
+    </section>
+
+    <!-- Citation Inspector Modal / Drawer -->
+    <div class="modal-backdrop hidden" id="citation-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-inst-title">Official Instrument Citation</h3>
+          <button class="btn-close" id="modal-close">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="meta-grid">
+            <div><strong>Authority:</strong> <span id="modal-authority">CBIC</span></div>
+            <div><strong>Clause / Entry:</strong> <span id="modal-clause">Entry 26(i)</span></div>
+            <div><strong>Effective From:</strong> <span id="modal-effective-from">2017-08-22</span></div>
+            <div><strong>Status Today:</strong> <span id="modal-in-force" class="badge badge-success">In Force</span></div>
+          </div>
+
+          <div class="passage-box">
+            <h4>Original Statutory Text Passage:</h4>
+            <blockquote id="modal-passage-text">Loading passage snippet...</blockquote>
+          </div>
+
+          <!-- Bounding Box Visualizer -->
+          <div class="bbox-viewer">
+            <h4>Gazette Page Coordinates (Bounding Box):</h4>
+            <div class="bbox-details">
+              <span>Page: <strong id="modal-bbox-page">1</strong></span>
+              <span>Coordinates [x0, y0, x1, y1]: <code id="modal-bbox-coords">[72.0, 100.0, 540.0, 250.0]</code></span>
+              <span>OCR Quality: <strong id="modal-ocr-quality">99%</strong></span>
+            </div>
+            <div class="bbox-canvas-sim">
+              <div class="bbox-highlight" id="modal-bbox-highlight">Highlighted Statutory Clause</div>
+            </div>
+          </div>
+
+          <!-- Amendment Timeline -->
+          <div class="timeline-box">
+            <h4>Amendment & Supersession History:</h4>
+            <ul id="modal-timeline-list" class="timeline-list">
+              <li>No amendments recorded.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="#" target="_blank" class="btn btn-secondary" id="modal-source-link">View Gazette Source URL ↗</a>
+          <button class="btn btn-primary" id="modal-close-btn">Done</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- DPDP Privacy and Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="privacy-statement">
+        <strong>DPDP Act 2023 Compliance & Data Residency:</strong>
+        All queries are scrubbed in real-time for Personally Identifiable Information (PAN, GSTIN, Aadhaar, Phone, Email) before processing.
+        Audit logs are strictly bounded by a 30-day rolling TTL. Hosted in MeitY-empanelled India Region datacenters.
+      </div>
+      <div class="privacy-actions">
+        <button class="btn btn-sm btn-outline-warning" id="btn-purge-session">Purge My Session Data</button>
+      </div>
+      <div class="footer-meta">
+        <span>Anupalan v0.1.0 • Apache 2.0 Open Source • <a href="/docs" target="_blank">OpenAPI Docs</a> • <a href="/metrics" target="_blank">Prometheus Metrics</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -53,9 +53,16 @@ class BenchmarkEvaluator:
 
     def _ensure_corpus_indexed(self) -> None:
         """Seeds in-memory knowledge base with all 40 core instruments if not already populated."""
-        from services.api.src.main import CHUNKS_DB, VERSION_GRAPH, chunker
+        from services.api.src.main import (
+            CHUNKS_DB,
+            VERSION_GRAPH,
+            chunker,
+            load_core_instruments,
+        )
         from services.ingestion.src.version_graph import InstrumentNode
         from uuid import uuid4
+
+        load_core_instruments()
 
         if not self.fixtures_path.exists():
             return

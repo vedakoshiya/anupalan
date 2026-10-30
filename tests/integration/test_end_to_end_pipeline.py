@@ -21,11 +21,16 @@ from packages.generation.src.generation.schemas import (
 from services.api.src.main import (
     CHUNKS_DB,
     FEEDBACK_DB,
+    INSTRUMENTS_DB,
     VERSION_GRAPH,
     ask_question,
     chunker,
+    delete_session,
     get_chunk,
+    get_instrument,
+    get_metrics,
     health_check,
+    load_core_instruments,
     submit_feedback,
 )
 from services.ingestion.src.chunker import StatutoryChunk
@@ -149,11 +154,13 @@ class TestEndToEndPipeline(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # Reset in-memory DBs to keep test suites hermetic
+        # Reset in-memory DBs and restore core fixtures to keep all test suites hermetic
         CHUNKS_DB.clear()
         FEEDBACK_DB.clear()
         VERSION_GRAPH.nodes.clear()
         VERSION_GRAPH.edges.clear()
+        INSTRUMENTS_DB.clear()
+        load_core_instruments()
 
     def test_01_health_endpoint(self):
         """Verifies GET /v1/health returns healthy status and indexed chunk count."""
@@ -242,11 +249,47 @@ class TestEndToEndPipeline(unittest.TestCase):
         self.assertEqual(len(FEEDBACK_DB), 1)
 
     def test_06_get_chunk_by_id(self):
-        """Verifies GET /v1/chunks/{id} returns chunk detail."""
+        """Verifies GET /v1/chunks/{id} returns chunk detail with bounding box coordinates."""
         chunk_id = next(iter(CHUNKS_DB.keys()))
         chunk_data = get_chunk(chunk_id)
         self.assertEqual(chunk_data["id"], chunk_id)
         self.assertIn("Notification", chunk_data["instrument_title"])
+        self.assertIn("bbox", chunk_data)
+        self.assertIn("ocr_quality", chunk_data)
+
+    def test_07_get_instrument_with_amendment_timeline(self):
+        """Verifies GET /v1/instruments/{id} returns full metadata and amendment graph timeline."""
+        inst_data = get_instrument("INST-GST-COMP-002")
+        self.assertEqual(inst_data["code"], "INST-GST-COMP-002")
+        self.assertIn("amendment_timeline", inst_data)
+        timeline = inst_data["amendment_timeline"]
+        # Verified superseded by Notification 14/2019
+        superseded_by_codes = [s["code"] for s in timeline["superseded_by"]]
+        self.assertIn("INST-GST-COMP-003", superseded_by_codes)
+
+    def test_08_dpdp_session_deletion_and_prometheus_metrics(self):
+        """Verifies DPDP Act 2023 right to erasure and Prometheus operational metrics export."""
+        test_session = uuid4()
+        req = AskRequest(
+            query="Job work rate in Surat textiles?",
+            as_of=date(2026, 10, 26),
+            session_id=test_session,
+        )
+        ask_question(req)
+
+        # Delete session
+        del_res = delete_session(test_session)
+        self.assertEqual(del_res["status"], "purged")
+        self.assertEqual(del_res["session_id"], str(test_session))
+        self.assertGreaterEqual(del_res["purged_records"], 1)
+
+        # Prometheus metrics export
+        metrics_resp = get_metrics()
+        self.assertEqual(metrics_resp.status_code, 200)
+        metrics_text = metrics_resp.body.decode("utf-8")
+        self.assertIn("anupalan_http_requests_total", metrics_text)
+        self.assertIn("anupalan_answers_total", metrics_text)
+        self.assertIn("anupalan_dpdp_purged_records_total", metrics_text)
 
 
 if __name__ == "__main__":
