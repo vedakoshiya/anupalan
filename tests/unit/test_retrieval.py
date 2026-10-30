@@ -91,6 +91,32 @@ class TestHybridRetriever(unittest.TestCase):
         retrieved_ids = [r.chunk.id for r in results]
         self.assertIn(self.chunk_expired.id, retrieved_ids)
 
+    def test_retrieve_with_rerank_and_parent_expansion(self):
+        results = self.retriever.retrieve(
+            query="textile job work rate 5 percent",
+            as_of=date(2020, 1, 1),
+            rerank=True,
+            expand_parent=True,
+        )
+        self.assertGreater(len(results), 0)
+        self.assertEqual(results[0].chunk.id, self.chunk1.id)
+        self.assertIsNotNone(results[0].rerank_score)
+        self.assertIsNotNone(results[0].expanded_text)
+
+    def test_retriever_confidence_gate_evaluation(self):
+        results = self.retriever.retrieve(
+            query="textile job work",
+            as_of=date(2020, 1, 1),
+        )
+        conf = self.retriever.evaluate_confidence(results)
+        self.assertTrue(conf.is_confident)
+        self.assertIn(conf.confidence_level, ("medium", "high"))
+
+        # Empty candidates
+        conf_empty = self.retriever.evaluate_confidence([])
+        self.assertFalse(conf_empty.is_confident)
+        self.assertEqual(conf_empty.confidence_level, "low")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,7 +1,7 @@
 """Hybrid retrieval engine combining BM25 lexical search and dense semantic vectors.
 
 Implements Reciprocal Rank Fusion (RRF), temporal metadata pre-filtering,
-supersession checks, and parent clause expansion.
+cross-encoder reranking, supersession checks, and parent clause context expansion (Spec Section 2.2).
 """
 
 import math
@@ -11,6 +11,18 @@ from datetime import date
 from typing import Any
 from uuid import UUID
 
+from packages.retrieval.src.retrieval.confidence_gate import (
+    ConfidenceResult,
+    RetrievalConfidenceGate,
+)
+from packages.retrieval.src.retrieval.metadata_filter import FilterCriteria, MetadataFilter
+from packages.retrieval.src.retrieval.parent_expander import ParentClauseExpander
+from packages.retrieval.src.retrieval.reranker import CrossEncoderReranker
+from packages.retrieval.src.retrieval.supersession_resolver import SupersessionResolver
+from packages.retrieval.src.retrieval.vector_store import (
+    BaseRetrievalStore,
+    InMemoryRetrievalStore,
+)
 from services.ingestion.src.chunker import StatutoryChunk
 from services.ingestion.src.version_graph import LegalVersionGraph
 
@@ -23,6 +35,8 @@ class ScoredChunk:
     rrf_score: float
     is_superseded: bool = False
     superseded_by: str | None = None
+    rerank_score: float | None = None
+    expanded_text: str | None = None
 
 
 class HybridRetriever:
@@ -33,14 +47,24 @@ class HybridRetriever:
         chunks: list[StatutoryChunk],
         version_graph: LegalVersionGraph | None = None,
         rrf_k: int = 60,
+        store: BaseRetrievalStore | None = None,
+        reranker: CrossEncoderReranker | None = None,
     ):
         self.chunks = chunks
         self.version_graph = version_graph
         self.rrf_k = rrf_k
+        self.store = store or InMemoryRetrievalStore()
+        self.store.add_chunks(self.chunks)
+
+        self.supersession_resolver = SupersessionResolver(version_graph=version_graph)
+        self.parent_expander = ParentClauseExpander(corpus_chunks=chunks)
+        self.reranker = reranker or CrossEncoderReranker()
+        self.confidence_gate = RetrievalConfidenceGate()
+
         self._build_lexical_index()
 
     def _build_lexical_index(self) -> None:
-        """Simple in-memory inverted index and BM25 term frequencies for testing/standalone retrieval."""
+        """In-memory inverted index and BM25 term frequencies for standalone retrieval."""
         self.doc_count = len(self.chunks)
         self.doc_lengths: dict[UUID, int] = {}
         self.term_doc_freq: dict[str, int] = {}
@@ -97,23 +121,26 @@ class HybridRetriever:
         as_of: date,
         jurisdiction: str | None = None,
         top_k: int = 8,
+        rerank: bool = False,
+        resolve_supersessions: bool = True,
+        expand_parent: bool = True,
     ) -> list[ScoredChunk]:
-        """Executes filtered hybrid search across statutory chunks with temporal grounding."""
+        """Executes filtered hybrid search across statutory chunks with temporal grounding.
+
+        Steps:
+        1. Temporal & jurisdictional pre-filtering via MetadataFilter.
+        2. Lexical scoring (BM25) and Dense vector scoring.
+        3. Reciprocal Rank Fusion (RRF) candidate merge.
+        4. Legal Version Graph supersession resolution.
+        5. Cross-Encoder reranking (optional/high precision).
+        6. Parent clause context expansion.
+        """
         query_tokens = self._tokenize(query)
 
         # 1. Pre-filter by temporal validity and jurisdiction
-        valid_candidates: list[StatutoryChunk] = []
-        for c in self.chunks:
-            # Check jurisdiction
-            if jurisdiction and c.jurisdiction != jurisdiction and c.jurisdiction != "central":
-                continue
-            # Check effective date validity on as_of
-            if c.effective_from > as_of:
-                continue
-            if c.effective_to and c.effective_to <= as_of:
-                continue
-
-            valid_candidates.append(c)
+        criteria = FilterCriteria(as_of=as_of, jurisdiction=jurisdiction)
+        filter_engine = MetadataFilter(criteria)
+        valid_candidates = filter_engine.filter_chunks(self.chunks)
 
         if not valid_candidates:
             return []
@@ -123,7 +150,7 @@ class HybridRetriever:
         bm25_matched = [c for c in valid_candidates if bm25_scores[c.id] > 0.0]
         bm25_matched.sort(key=lambda c: bm25_scores[c.id], reverse=True)
 
-        # 3. Score with Dense Vectors (Proxy in unit tests)
+        # 3. Score with Dense Vectors (Proxy in unit tests / fast offline)
         dense_scores = {c.id: self._mock_dense_similarity(query_tokens, c) for c in valid_candidates}
         dense_matched = [c for c in valid_candidates if dense_scores[c.id] > 0.0]
         dense_matched.sort(key=lambda c: dense_scores[c.id], reverse=True)
@@ -158,4 +185,31 @@ class HybridRetriever:
             )
 
         scored.sort(key=lambda s: s.rrf_score, reverse=True)
-        return scored[:top_k]
+
+        # 6. Supersession Resolution via Legal Version Graph
+        if resolve_supersessions and self.version_graph:
+            scored = self.supersession_resolver.annotate_candidates(
+                candidates=scored,
+                as_of=as_of,
+                demote_superseded=True,
+            )
+
+        # 7. Cross-Encoder Reranking
+        if rerank and self.reranker:
+            scored = self.reranker.rerank_scored_chunks(
+                query=query,
+                candidates=scored,
+                top_k=top_k,
+            )
+        else:
+            scored = scored[:top_k]
+
+        # 8. Parent Clause Context Expansion
+        if expand_parent:
+            scored = self.parent_expander.expand_candidates(scored)
+
+        return scored
+
+    def evaluate_confidence(self, candidates: list[ScoredChunk]) -> ConfidenceResult:
+        """Evaluates retrieval confidence of candidates via the confidence gate."""
+        return self.confidence_gate.evaluate(candidates)
