@@ -1,0 +1,18 @@
+{
+  "total_queries": 50,
+  "successful_queries": 50,
+  "failed_queries": 0,
+  "duration_seconds": 0.036,
+  "actual_qps": 1405.48,
+  "p50_latency_sec": 0.0,
+  "p90_latency_sec": 0.002,
+  "p95_latency_sec": 0.0034,
+  "p99_latency_sec": 0.0062,
+  "min_latency_sec": 0.0,
+  "max_latency_sec": 0.0062,
+  "avg_latency_sec": 0.0006,
+  "error_rate": 0.0,
+  "sla_met": true,
+  "target_p95_sla_sec": 8.0,
+  "target_p50_sla_sec": 4.0
+}

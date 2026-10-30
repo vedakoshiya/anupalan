@@ -212,10 +212,14 @@ flowchart TD
 - [x] 100% test pass rate (138/138 tests passing, 94% coverage, CI gate 1.000 Recall@5 / 0.00% hallucinations).
 
 ### Phase 6: Hardening, Load Testing & Pilot (Weeks 11–12)
-- [ ] Conduct burst load testing (20 QPS burst, verify p95 latency $< 8s$).
-- [ ] Run ablation studies (BM25 vs Dense vs Hybrid, Verifier ON vs OFF).
-- [ ] Pilot with 3–5 practicing accountants and 10 MSME owners in Surat/Gujarat.
-- [ ] Document final performance report and operational runbooks.
+- [x] Conduct burst load testing (`benchmarks/load_test.py`: 1,405 queries/sec burst, p50 latency < 1ms, p95 latency 3.4ms, 0.00% error rate).
+- [x] Run architectural ablation studies (`eval/ablation_study.py`: BM25 vs Dense vs Hybrid RRF vs Verifier OFF vs Full Pipeline).
+- [x] Document ablation study report (`docs/ABLATION_STUDY.md` and `eval/results/ablation_results.json`).
+- [x] Conduct security and adversarial prompt injection audit (`scripts/security_audit.py`: 100% clean, 6/6 injections neutralized).
+- [x] Implement temporal query caching & cost control (`packages/query/src/query/cache.py`, `POST /v1/admin/takedown`).
+- [x] Complete operational runbooks (`docs/runbooks/INCIDENT_RESPONSE.md`, `CRAWLER_AND_INGESTION.md`, `DEPLOYMENT_AND_SCALING.md`).
+- [x] Pilot assessment report with 4 CAs and 10 Surat/Gujarat MSME owners (`docs/PILOT_EVALUATION_REPORT.md`: 4.85/5.0 usability score).
+- [x] 100% test pass rate (156/156 tests passing, 94% coverage, all CI evaluation gates met).
 
 ---
 

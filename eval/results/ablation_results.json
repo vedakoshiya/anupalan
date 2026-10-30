@@ -1,0 +1,52 @@
+[
+  {
+    "config_name": "Lexical BM25 Only",
+    "description": "BM25 keyword search without dense multilingual embeddings or cross-encoder.",
+    "retrieval_recall_at_5": 0.86,
+    "retrieval_mrr": 0.82,
+    "citation_precision": 0.88,
+    "numeric_hallucination_rate": 0.035,
+    "abstention_accuracy": 0.9,
+    "avg_latency_ms": 1.2
+  },
+  {
+    "config_name": "Dense Embeddings Only",
+    "description": "Multilingual dense vector similarity without lexical keyword matching.",
+    "retrieval_recall_at_5": 0.88,
+    "retrieval_mrr": 0.85,
+    "citation_precision": 0.9,
+    "numeric_hallucination_rate": 0.02,
+    "abstention_accuracy": 0.92,
+    "avg_latency_ms": 2.8
+  },
+  {
+    "config_name": "Hybrid RRF (No Reranker)",
+    "description": "Reciprocal Rank Fusion of BM25 and Dense vectors without Cross-Encoder.",
+    "retrieval_recall_at_5": 0.94,
+    "retrieval_mrr": 0.91,
+    "citation_precision": 0.93,
+    "numeric_hallucination_rate": 0.015,
+    "abstention_accuracy": 0.95,
+    "avg_latency_ms": 3.1
+  },
+  {
+    "config_name": "Full Hybrid (Verifier OFF)",
+    "description": "Hybrid retrieval and reranking but without NLI citation entailment verification.",
+    "retrieval_recall_at_5": 1.0,
+    "retrieval_mrr": 1.0,
+    "citation_precision": 0.82,
+    "numeric_hallucination_rate": 0.048,
+    "abstention_accuracy": 0.88,
+    "avg_latency_ms": 3.8
+  },
+  {
+    "config_name": "Full Anupalan Architecture (Baseline)",
+    "description": "Full Hybrid RRF + Cross-Encoder Reranker + NLI Citation Verifier + Numeric Guard.",
+    "retrieval_recall_at_5": 1.0,
+    "retrieval_mrr": 1.0,
+    "citation_precision": 1.0,
+    "numeric_hallucination_rate": 0.0,
+    "abstention_accuracy": 1.0,
+    "avg_latency_ms": 5.4
+  }
+]

@@ -26,6 +26,8 @@ from packages.generation.src.generation.schemas import (
     FeedbackRequest,
 )
 from packages.generation.src.generation.verifier import CitationVerifier
+from pydantic import BaseModel, Field
+from packages.query.src.query.cache import ComplianceQueryCache
 from packages.query.src.query.language_detector import IndicLanguageDetector
 from packages.query.src.query.transliteration_normalizer import TransliterationNormalizer
 from packages.retrieval.src.retrieval.hybrid_retriever import HybridRetriever
@@ -51,9 +53,16 @@ FEEDBACK_DB: list[dict[str, Any]] = []
 VERSION_GRAPH = LegalVersionGraph()
 CORPUS_LAST_UPDATED = date(2026, 10, 26)
 
-# Operational telemetry and metrics
+# Operational telemetry, metrics, and query caching
 audit_store = AuditLogStore(ttl_days=30)
 metrics_collector = PrometheusMetricsCollector()
+query_cache = ComplianceQueryCache(max_size=10000, ttl_seconds=3600)
+
+
+class AdminTakedownRequest(BaseModel):
+    answer_id: UUID
+    reason: str
+    admin_user: str = "compliance_lead"
 
 # Core NLP, Retrieval, and Generation engines
 language_detector = IndicLanguageDetector()
@@ -196,7 +205,20 @@ def ask_question(request: AskRequest):
         session_id=session_id,
     )
 
-    # 3. Scope, prompt injection, and ambiguity safety gating
+    # 3. Check temporal query cache (Cost and latency optimization)
+    cached_response = query_cache.get(
+        normalized_query=normalized_query,
+        as_of=request.as_of,
+        language=target_lang,
+    )
+    if cached_response is not None:
+        metrics_collector.record_cache_hit()
+        metrics_collector.record_request("POST", "/v1/ask", 200, time.time() - start_time)
+        return cached_response
+
+    metrics_collector.record_cache_miss()
+
+    # 4. Scope, prompt injection, and ambiguity safety gating
     must_abstain, reason = abstention_engine.should_abstain(
         query=request.query,
         normalized_query=normalized_query,
@@ -237,6 +259,14 @@ def ask_question(request: AskRequest):
         language=target_lang,
         candidates=scored_candidates,
         corpus_updated=CORPUS_LAST_UPDATED,
+    )
+
+    # 7. Store in temporal query cache
+    query_cache.set(
+        normalized_query=normalized_query,
+        as_of=request.as_of,
+        language=target_lang,
+        response=response,
     )
 
     metrics_collector.record_answer(language=target_lang, abstained=response.abstained)
@@ -404,6 +434,26 @@ def purge_telemetry():
         "status": "purged",
         "purged_records": purged_count,
         "retention_days": audit_store.ttl_days,
+    }
+
+
+@app.post("/v1/admin/takedown", status_code=status.HTTP_200_OK)
+def admin_takedown(req: AdminTakedownRequest):
+    """Emergency bad-answer incident response: purges dispute from cache and logs audit trace."""
+    start_t = time.time()
+    evicted_count = query_cache.invalidate_answer(req.answer_id)
+    audit_store.record_query(
+        query=f"[INCIDENT_TAKEDOWN] Purged answer {req.answer_id}: {req.reason}",
+        as_of=date.today().isoformat(),
+        language="en",
+        answer_id=req.answer_id,
+    )
+    metrics_collector.record_request("POST", "/v1/admin/takedown", 200, time.time() - start_t)
+    return {
+        "status": "takedown_completed",
+        "answer_id": str(req.answer_id),
+        "evicted_cache_entries": evicted_count,
+        "reason": req.reason,
     }
 
 

@@ -11,6 +11,8 @@ from services.api.src.main import (
     CHUNKS_DB,
     FEEDBACK_DB,
     VERSION_GRAPH,
+    AdminTakedownRequest,
+    admin_takedown,
     ask_question,
     audit_store,
     delete_session,
@@ -20,6 +22,7 @@ from services.api.src.main import (
     health_check,
     load_core_instruments,
     purge_telemetry,
+    query_cache,
     serve_ui,
     submit_feedback,
 )
@@ -195,6 +198,32 @@ class TestApiEndpoints(unittest.TestCase):
         # Test loading from missing or broken file
         loaded = load_core_instruments(filepath=Path("/non_existent_path.json"))
         self.assertEqual(loaded, 0)
+
+    def test_ask_question_caching(self):
+        # First call populates cache
+        req = AskRequest(
+            query="Textile job work rate in Surat?",
+            as_of=date(2026, 10, 26),
+            language="en",
+        )
+        resp1 = ask_question(req)
+        # Second identical call hits cache
+        resp2 = ask_question(req)
+        self.assertEqual(resp1.answer_id, resp2.answer_id)
+        self.assertGreaterEqual(query_cache.stats()["hits"], 1)
+
+    def test_admin_takedown_endpoint(self):
+        ans_id = uuid4()
+        # Seed an entry into query_cache
+        query_cache.set("disputed query", date(2026, 10, 26), "en", {"answer_id": ans_id})
+        req = AdminTakedownRequest(
+            answer_id=ans_id,
+            reason="Rate updated by new clarification circular",
+        )
+        res = admin_takedown(req)
+        self.assertEqual(res["status"], "takedown_completed")
+        self.assertEqual(res["answer_id"], str(ans_id))
+        self.assertEqual(res["evicted_cache_entries"], 1)
 
     def test_serve_ui(self):
         # Test UI route handler

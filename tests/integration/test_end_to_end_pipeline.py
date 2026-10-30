@@ -23,6 +23,8 @@ from services.api.src.main import (
     FEEDBACK_DB,
     INSTRUMENTS_DB,
     VERSION_GRAPH,
+    AdminTakedownRequest,
+    admin_takedown,
     ask_question,
     chunker,
     delete_session,
@@ -31,6 +33,7 @@ from services.api.src.main import (
     get_metrics,
     health_check,
     load_core_instruments,
+    query_cache,
     submit_feedback,
 )
 from services.ingestion.src.chunker import StatutoryChunk
@@ -290,6 +293,30 @@ class TestEndToEndPipeline(unittest.TestCase):
         self.assertIn("anupalan_http_requests_total", metrics_text)
         self.assertIn("anupalan_answers_total", metrics_text)
         self.assertIn("anupalan_dpdp_purged_records_total", metrics_text)
+
+    def test_09_query_cache_hit_and_admin_takedown(self):
+        """Verifies query caching (cost optimization) and emergency administrative takedown."""
+        query_text = "What is the revised rate for textile job work in 2024?"
+        as_of = date(2024, 1, 1)
+
+        req1 = AskRequest(query=query_text, as_of=as_of, language="en")
+        resp1 = ask_question(req1)
+        self.assertFalse(resp1.abstained)
+
+        # Second identical request must hit the cache
+        req2 = AskRequest(query=query_text, as_of=as_of, language="en")
+        resp2 = ask_question(req2)
+        self.assertEqual(resp1.answer_id, resp2.answer_id)
+        self.assertGreater(query_cache.stats()["hits"], 0)
+
+        # Admin Takedown: purge answer from cache
+        takedown_req = AdminTakedownRequest(
+            answer_id=resp1.answer_id,
+            reason="Tested emergency takedown procedure",
+        )
+        td_res = admin_takedown(takedown_req)
+        self.assertEqual(td_res["status"], "takedown_completed")
+        self.assertEqual(td_res["evicted_cache_entries"], 1)
 
 
 if __name__ == "__main__":

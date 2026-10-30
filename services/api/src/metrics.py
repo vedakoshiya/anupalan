@@ -18,9 +18,19 @@ class PrometheusMetricsCollector:
         self.answers_generated: dict[tuple[str, bool], int] = defaultdict(int)
         self.feedback_recorded: dict[str, int] = defaultdict(int)
         self.dpdp_purges_total = 0
+        self.cache_hits_total = 0
+        self.cache_misses_total = 0
 
         # Latencies in seconds
         self.latencies: list[float] = []
+
+    def record_cache_hit(self) -> None:
+        """Records a query cache hit."""
+        self.cache_hits_total += 1
+
+    def record_cache_miss(self) -> None:
+        """Records a query cache miss."""
+        self.cache_misses_total += 1
 
     def record_request(
         self,
@@ -95,5 +105,14 @@ class PrometheusMetricsCollector:
         lines.append("\n# HELP anupalan_dpdp_purged_records_total Records purged under DPDP Act 2023.")
         lines.append("# TYPE anupalan_dpdp_purged_records_total counter")
         lines.append(f"anupalan_dpdp_purged_records_total {self.dpdp_purges_total}")
+
+        # 7. Query Cache Counters
+        lines.append("\n# HELP anupalan_cache_hits_total Total query cache hits.")
+        lines.append("# TYPE anupalan_cache_hits_total counter")
+        lines.append(f"anupalan_cache_hits_total {self.cache_hits_total}")
+
+        lines.append("\n# HELP anupalan_cache_misses_total Total query cache misses.")
+        lines.append("# TYPE anupalan_cache_misses_total counter")
+        lines.append(f"anupalan_cache_misses_total {self.cache_misses_total}")
 
         return "\n".join(lines) + "\n"
