@@ -9,6 +9,7 @@ from uuid import UUID, uuid4
 from fastapi import FastAPI, HTTPException, status
 
 from packages.generation.src.generation.abstention_engine import AbstentionEngine
+from packages.generation.src.generation.generator import ComplianceGenerator
 from packages.generation.src.generation.numeric_guard import NumericGuardrail
 from packages.generation.src.generation.schemas import (
     AskRequest,
@@ -43,6 +44,7 @@ chunker = StructureAwareChunker()
 abstention_engine = AbstentionEngine()
 verifier = CitationVerifier()
 numeric_guard = NumericGuardrail()
+generator = ComplianceGenerator()
 
 
 def get_retriever() -> HybridRetriever:
@@ -101,60 +103,12 @@ def ask_question(request: AskRequest):
             reason="insufficient_evidence",
         )
 
-    # 4. Synthesize Claims from top retrieved passage
-    top = scored_candidates[0].chunk
-    citations = [
-        Citation(
-            chunk_id=top.id,
-            instrument=top.instrument_title,
-            clause=top.section_path,
-            effective_from=top.effective_from,
-        )
-    ]
-
-    # Plain language summary & claim based on retrieved content
-    summary_text = f"સત્તાવાર સૂચના મુજબ: {top.text}" if target_lang == "gu" else top.text
-    claims = [
-        Claim(
-            text=top.text,
-            citations=citations,
-            confidence=0.95,
-        )
-    ]
-
-    # 5. Run Verification & Numeric Guardrails
-    available_chunks_map = {c.id: c for c in [s.chunk for s in scored_candidates]}
-    is_valid_cit, cit_errors = verifier.verify_citations(claims, available_chunks_map)
-    if not is_valid_cit:
-        return abstention_engine.create_abstention_response(
-            language=target_lang,
-            as_of=request.as_of,
-            corpus_updated=CORPUS_LAST_UPDATED,
-        )
-
-    # Numeric Guardrail Check
-    for cl in claims:
-        is_num_valid, _ = numeric_guard.verify_claim(cl.text, [top])
-        if not is_num_valid:
-            return abstention_engine.create_abstention_response(
-                language=target_lang,
-                as_of=request.as_of,
-                corpus_updated=CORPUS_LAST_UPDATED,
-            )
-
-    next_steps = [
-        "ચલણ અને એચએસએન (HSN) કોડ ચકાસો." if target_lang == "gu" else "Verify delivery challan and HSN code.",
-        "તમારા સીએ (CA) સાથે ચર્ચા કરો." if target_lang == "gu" else "Confirm eligibility with your accountant.",
-    ]
-
-    return AskResponse(
-        answer_id=uuid4(),
-        language=target_lang,
-        abstained=False,
-        summary=summary_text,
-        claims=claims,
-        next_steps=next_steps,
+    # 5. Generate and verify grounded answer with NLI verifier and advanced numeric guardrail
+    return generator.generate_answer(
+        query=request.query,
         as_of=request.as_of,
+        language=target_lang,
+        candidates=scored_candidates,
         corpus_updated=CORPUS_LAST_UPDATED,
     )
 

@@ -198,11 +198,11 @@ flowchart TD
 - [x] Validate retrieval Recall@5 $\ge$ 0.90 against the golden dataset (achieved Recall@5 = 1.000).
 
 ### Phase 4: Generation, Verifier & Guardrails (Weeks 7–8)
-- [ ] Implement structured JSON prompt generation with Pydantic output schemas.
-- [ ] Build NLI/entailment citation verifier to check each claim against cited passages.
-- [ ] Implement strict Numeric Guardrail (validating numbers, percentages, dates).
-- [ ] Implement Abstention Engine for low-confidence queries.
-- [ ] Validate Faithfulness $\ge$ 0.95 and Hallucinated Numbers $< 1\%$.
+- [x] Implement structured JSON prompt generation with Pydantic output schemas.
+- [x] Build NLI/entailment citation verifier to check each claim against cited passages.
+- [x] Implement strict Numeric Guardrail (validating numbers, percentages, dates, and vernaculars).
+- [x] Implement Abstention Engine for low-confidence, out-of-scope, and ambiguous queries.
+- [x] Validate Faithfulness $\ge$ 0.95 and Hallucinated Numbers $< 1\%$ (achieved 0.00% hallucinations).
 
 ### Phase 5: API, Web Client & Operational Observability (Weeks 9–10)
 - [ ] Implement FastAPI endpoints (`/v1/ask`, `/v1/instruments/{id}`, `/v1/chunks/{id}`, `/v1/feedback`).
