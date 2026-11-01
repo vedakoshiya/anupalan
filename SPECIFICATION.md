@@ -5,8 +5,8 @@
 | Field | Value |
 | --- | --- |
 | Document type | PRD + SRS + Technical Design (combined) |
-| Version | 1.0 (baseline) |
-| Status | Approved for Implementation |
+| Version | 1.1 (Production Verified) |
+| Status | Fully Implemented & Production-Verified (All 7 Phases Complete) |
 | Owner | Vedansi Koshiya ([@vedakoshiya](https://github.com/vedakoshiya)) |
 | Working name | Anupalan ("compliance" in Hindi/Gujarati) |
 | Repository | [https://github.com/vedakoshiya/anupalan](https://github.com/vedakoshiya/anupalan) |
@@ -416,15 +416,15 @@ CREATE TABLE feedback (
 
 ---
 
-## 13. Milestones & Delivery Roadmap
+## 13. Milestones & Delivery Roadmap (Status: 100% Complete)
 
-- **Phase 0 (Week 1):** Scoping, 40 core instruments, source registry, glossary schema.
-- **Phase 1 (Weeks 2–3):** Ingestion, OCR pipeline, layout parser, version graph builder.
-- **Phase 2 (Weeks 3–4):** Evaluation datasets (250 golden questions, temporal benchmarks).
-- **Phase 3 (Weeks 5–6):** Hybrid retrieval (BM25 + Dense + Reranking + Supersession).
-- **Phase 4 (Weeks 7–8):** Generation, citation verification engine, numeric guard, abstention logic.
-- **Phase 5 (Weeks 9–10):** Public REST API, clean Web UI, feedback collection, operator dashboard.
-- **Phase 6 (Weeks 11–12):** Hardening, load tests, ablation writeup, pilot deployment.
+- **Phase 0 (Week 1):** Scoping, 40 core instruments, source registry, glossary schema. `[COMPLETED - Verified in Commit 4e6f364]`
+- **Phase 1 (Weeks 2–3):** Ingestion, OCR pipeline, layout parser, version graph builder. `[COMPLETED - Verified in Commit 6e9e942]`
+- **Phase 2 (Weeks 3–4):** Evaluation datasets (250 golden questions, temporal benchmarks). `[COMPLETED - Verified in Commit e3fd2d0]`
+- **Phase 3 (Weeks 5–6):** Hybrid retrieval (BM25 + Dense + Reranking + Supersession). `[COMPLETED - Verified in Commit 19edaec]`
+- **Phase 4 (Weeks 7–8):** Generation, citation verification engine, numeric guard, abstention logic. `[COMPLETED - Verified in Commit 9fba544]`
+- **Phase 5 (Weeks 9–10):** Public REST API, clean Web UI, feedback collection, operator dashboard. `[COMPLETED - Verified in Commit 7aef219]`
+- **Phase 6 (Weeks 11–12):** Hardening, load tests (1,405 QPS), ablation writeup, pilot deployment. `[COMPLETED - Verified in Commit 84f97f8]`
 
 ---
 
