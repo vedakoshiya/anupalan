@@ -1,16 +1,28 @@
+<p align="center">
+  <img src="docs/assets/anupalan-banner.svg" alt="Anupalan Banner" width="100%">
+</p>
+
 # Anupalan (અનુપાલન / अनुपालन)
 
 > **Multilingual, Citation-Grounded Statutory Compliance Navigator for Indian MSMEs**  
 > *Zero Hallucination • Indic Dialect Understanding (Gujlish/Gu/Hi/En) • DPDP Act 2023 Compliant • 1,400+ QPS*
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12-brightgreen.svg)](https://www.python.org/)
-[![Tests Passing](https://img.shields.io/badge/Tests-156%20Passing%20(100%25)-success.svg)](tests/)
-[![Coverage](https://img.shields.io/badge/Coverage-94%25-brightgreen.svg)](tests/)
-[![Hallucination Rate](https://img.shields.io/badge/Numeric%20Hallucinations-0.00%25-brightgreen.svg)](eval/)
-[![Throughput](https://img.shields.io/badge/Throughput-1%2C405%20QPS%20(p95%3A%203.4ms)-blueviolet.svg)](benchmarks/)
-[![DPDP Act 2023](https://img.shields.io/badge/DPDP%20Act%202023-Compliant%20by%20Design-orange.svg)](#-data-privacy--dpdp-act-2023-guarantees)
-[![GitHub Stars](https://img.shields.io/github/stars/vedakoshiya/anupalan?style=social)](https://github.com/vedakoshiya/anupalan)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12-brightgreen.svg" alt="Python"></a>
+  <a href="tests/"><img src="https://img.shields.io/badge/Tests-156%20Passing%20(100%25)-success.svg" alt="Tests"></a>
+  <a href="tests/"><img src="https://img.shields.io/badge/Coverage-94%25-brightgreen.svg" alt="Coverage"></a>
+  <a href="eval/"><img src="https://img.shields.io/badge/Numeric%20Hallucinations-0.00%25-brightgreen.svg" alt="Hallucination"></a>
+  <a href="benchmarks/"><img src="https://img.shields.io/badge/Throughput-1%2C405%20QPS%20(p95%3A%203.4ms)-blueviolet.svg" alt="Throughput"></a>
+  <a href="#-data-privacy--dpdp-act-2023-guarantees"><img src="https://img.shields.io/badge/DPDP%20Act%202023-Compliant%20by%20Design-orange.svg" alt="DPDP"></a>
+  <a href="https://github.com/vedakoshiya/anupalan"><img src="https://img.shields.io/github/stars/vedakoshiya/anupalan?style=social" alt="GitHub Stars"></a>
+</p>
+
+<p align="center">
+  <a href="https://twitter.com/intent/tweet?text=Check%20out%20Anupalan%20%E2%9A%96%EF%B8%8F%20%E2%80%94%20Open-Source%20Zero-Hallucination%20Compliance%20AI%20for%20Indian%20MSMEs%20in%20Gujarati%2C%20Hindi%2C%20Gujlish%20%26%20English!&url=https%3A%2F%2Fgithub.com%2Fvedakoshiya%2Fanupalan&hashtags=AI,IndicNLP,LegalTech,GST,OpenSource" target="_blank"><img src="https://img.shields.io/badge/Share%20on-Twitter%2FX-000000?style=for-the-badge&logo=x&logoColor=white" alt="Share on Twitter/X"></a>
+  <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fgithub.com%2Fvedakoshiya%2Fanupalan" target="_blank"><img src="https://img.shields.io/badge/Share%20on-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="Share on LinkedIn"></a>
+  <a href="https://api.whatsapp.com/send?text=Check%20out%20Anupalan%20%E2%9A%96%EF%B8%8F%20Zero-Hallucination%20Tax%20%26%20MSME%20Compliance%20AI%20in%20Gujarati%20%26%20Hindi%3A%20https%3A%2F%2Fgithub.com%2Fvedakoshiya%2Fanupalan" target="_blank"><img src="https://img.shields.io/badge/Share%20on-WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Share on WhatsApp"></a>
+</p>
 
 ---
 
@@ -233,6 +245,38 @@ python scripts/security_audit.py
 2. **Strict 30-Day Rolling TTL:** Query traces and conversation logs expire and are permanently purged after 30 days.
 3. **Single-Click Right to Erasure:** Users can erase all session data at any time via `DELETE /v1/sessions/{id}` or the web client purge button.
 4. **Data Residency Compliance:** Production architecture is designed for AWS/GCP India regions (`ap-south-1` / `asia-south1`).
+
+---
+
+## ❓ Frequently Asked Questions (FAQ)
+
+### Q1: What is Anupalan and who is it built for?
+**Anupalan (અનુપાલન / अनुपालन)** is an open-source, multilingual, citation-grounded compliance RAG engine engineered specifically for India's 63+ million Micro, Small, and Medium Enterprises (MSMEs), Chartered Accountants (CAs), tax advocates, and developers building Indic AI. It answers complex statutory questions across **Goods and Services Tax (GST)**, **Income Tax Section 43B(h)**, **Udyam MSME schemes**, and **Gujarat State industrial subsidies** with zero numeric hallucinations and verified official gazette citations.
+
+### Q2: How does Anupalan guarantee 0.00% numeric hallucination on tax rates?
+Standard large language models frequently hallucinate tax percentages (e.g. inventing 12% instead of 5%) or turnover thresholds. Anupalan employs a multi-tiered verification firewall:
+1. **XML Isolation Prompting:** Isolates retrieved gazette passages inside strict `<context>` boundaries.
+2. **NLI Entailment Verifier:** Checks that every generated factual claim is directly entailed by the retrieved gazette chunk.
+3. **Indic Numeric Guardrail:** Extracts all percentages (`%`), currency values (₹, INR, Lakhs, Crores), and day limits (`15 days`, `45 days`) using localized regular expressions and verifies their exact presence in the source text. Any answer containing unsupported numbers is immediately rejected and routed to safe abstention.
+
+### Q3: What is Section 43B(h) of the Income Tax Act and how does Anupalan track it?
+Under **Section 43B(h)** (enacted via the Finance Act 2023), any payment owed by a buyer to a registered Micro or Small Enterprise beyond the time limit specified in Section 15 of the MSMED Act 2006 (**15 days without written agreement, or up to 45 days with written agreement**) is disallowed as a tax deduction in that financial year and taxed as income. Anupalan provides exact clause-by-clause analysis, supplier classification rules (Micro vs Small vs Medium), and written agreement verification.
+
+### Q4: How does the Legal Version DAG handle superseded or amended CBIC circulars?
+Indian tax circulars frequently modify previous notifications. Anupalan models statutory instruments as a **Directed Acyclic Graph (DAG)** with relationship edges: `amends`, `supersedes`, and `clarifies`. When a query specifies an "as-of" reference date (e.g., `2024-04-01`), the retrieval engine walks the graph to resolve only the circulars legally active on that specific date, preventing outdated laws from being cited.
+
+### Q5: Can I ask compliance questions in Gujlish or vernacular scripts?
+Yes. Anupalan features native Indic dialect understanding. It accepts queries in:
+* **Gujlish** (Gujarati transliterated into Latin script, e.g., *"Job work par GST ketlo lage?"*)
+* **Gujarati Script** (e.g., *"કમ્પોઝિશન સ્કીમ માટે ટર્નઓવર મર્યાદા શું છે?"*)
+* **Hindi Script** (e.g., *"गुजरात एमएसएमई कैपिटल सब्सिडी के लिए क्या पात्रता है?"*)
+* **English** (e.g., *"What is the payment timeline under Section 43B(h)?"*)
+
+### Q6: How does Anupalan comply with India's DPDP Act 2023?
+Anupalan implements privacy-by-design under the **Digital Personal Data Protection Act 2023**:
+* **Automatic PII Redaction:** Redacts PAN cards, GSTIN numbers, Aadhaar cards, mobile numbers, and emails in memory before audit logging.
+* **Rolling 30-Day TTL:** All conversation telemetry logs automatically expire and are purged after 30 days.
+* **Right to Erasure:** Users can permanently delete session traces using the single-click purge button or `DELETE /v1/sessions/{id}` API.
 
 ---
 

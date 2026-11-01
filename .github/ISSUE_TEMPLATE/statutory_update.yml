@@ -1,0 +1,47 @@
+name: "📜 Add Regulatory Instrument / Gazette Circular"
+description: "Suggest a new GST notification, Section 43B(h) amendment, or State MSME policy to ingest."
+title: "[STATUTE]: "
+labels: ["statutory-corpus", "data"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help expand Anupalan's official regulatory corpus! Please provide links or references to the official gazette publication.
+  - type: input
+    id: instrument_title
+    attributes:
+      label: "Instrument Title & Number"
+      description: "Official title or circular reference."
+      placeholder: "e.g. CBIC Notification No. 12/2024-Central Tax (Rate)"
+    validations:
+      required: true
+  - type: dropdown
+    id: domain
+    attributes:
+      label: "Statutory Domain"
+      options:
+        - "GST (Central / Integrated / Rate)"
+        - "Income Tax Act (Section 43B(h) / MSME 45-day payment)"
+        - "MSMED Act 2006 & Udyam Classification"
+        - "State MSME Policy (Gujarat)"
+        - "State MSME Policy (Other States: MH, TN, KA, RJ, etc.)"
+        - "Labour Codes / Factory Compliance"
+        - "Digital Personal Data Protection (DPDP) Act 2023"
+    validations:
+      required: true
+  - type: input
+    id: official_url
+    attributes:
+      label: "Official Gazette / Government URL"
+      description: "Direct link to cbic.gov.in, egazette.gov.in, or state department portal."
+      placeholder: "https://www.cbic.gov.in/resources//htdocs-cbec/gst/notf...pdf"
+    validations:
+      required: true
+  - type: textarea
+    id: impact_summary
+    attributes:
+      label: "Key Impact on MSMEs"
+      description: "Brief summary of what this circular modifies, amends, or supersedes."
+      placeholder: "e.g. Reduces GST on textile warping job work from 12% to 5% effective Nov 2024."
+    validations:
+      required: true

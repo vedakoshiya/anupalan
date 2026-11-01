@@ -1,0 +1,29 @@
+name: "✨ Feature Request"
+description: "Suggest a new capability, vernacular language support, integration, or improvement."
+title: "[FEATURE]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We welcome ideas for new features, additional language models, and user interfaces!
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem or Opportunity"
+      description: "Is your feature request related to a specific challenge or limitation?"
+      placeholder: "e.g. As a tax consultant in Maharashtra, I want Anupalan to support Marathi queries and Maharashtra State MSME subsidies."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution"
+      description: "Describe the solution or enhancement you would like to see."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives Considered"
+      description: "Any alternative approaches, libraries, or workarounds you've explored."

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "💬 GitHub Discussions"
+    url: "https://github.com/vedakoshiya/anupalan/discussions"
+    about: "Discuss ideas, ask general compliance questions, and collaborate with the community."
+  - name: "🔒 Security & DPDP Disclosures"
+    url: "https://github.com/vedakoshiya/anupalan/blob/main/SECURITY.md"
+    about: "Report security vulnerabilities or data privacy compliance inquiries."

@@ -107,3 +107,17 @@ ignore = ["E501"]
 minversion = "8.0"
 addopts = "-ra -q --cov=packages --cov=services"
 testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["packages", "services"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/packages",
+    "/services",
+    "/config",
+    "/data",
+    "/README.md",
+    "/LICENSE",
+    "/pyproject.toml",
+]
