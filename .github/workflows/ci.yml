@@ -1,4 +1,4 @@
-name: Anupalan CI
+name: Anupalan CI Quality Gate
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  lint-and-security:
-    name: Lint, Type Check & Secret Scan
+  test-and-verify:
+    name: Test Suite, CI Evaluation Gates & Security Audit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -16,25 +16,32 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python 3.12
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.11"
 
-      - name: Install Linting Tools
+      - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install ruff mypy
-
-      - name: Run Ruff Lint
-        run: |
-          ruff check .
+          pip install fastapi uvicorn[standard] pydantic starlette httpx pytest pytest-cov
 
       - name: Secret Leak Prevention Check
         run: |
-          # Basic check to guarantee no active secret keys or env files are committed
           if git ls-files | grep -E '^\.env$|\.env\.local$|\.pem$|\.key$|credentials\.json$'; then
             echo "CRITICAL: Private credential files detected in git tree!"
             exit 1
           fi
           echo "Secret check passed cleanly."
+
+      - name: Run Full Test Suite with Coverage
+        run: |
+          python -m pytest tests --cov=. --cov-fail-under=90
+
+      - name: Run CI Evaluation Benchmark Gates
+        run: |
+          python eval/eval_gate.py
+
+      - name: Run Static Security & Injection Audit
+        run: |
+          python scripts/security_audit.py
