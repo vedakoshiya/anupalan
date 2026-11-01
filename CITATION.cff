@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use Anupalan in your research or business application, please cite it as below."
+authors:
+  - family-names: "Koshiya"
+    given-names: "Vedansi"
+    orcid: "https://orcid.org/0009-0000-0000-0000"
+title: "Anupalan: Multilingual, Citation-Grounded Compliance Navigator for Indian MSMEs"
+version: 0.1.0
+date-released: 2026-10-31
+url: "https://github.com/vedakoshiya/anupalan"
+repository-code: "https://github.com/vedakoshiya/anupalan"
+keywords:
+  - "rag"
+  - "retrieval-augmented-generation"
+  - "indic-nlp"
+  - "gujarati"
+  - "hindi"
+  - "gujlish"
+  - "gst"
+  - "msme"
+  - "legal-ai"
+  - "zero-hallucination"
+  - "dpdp-act-2023"
+license: "Apache-2.0"

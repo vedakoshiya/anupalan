@@ -5,31 +5,61 @@ build-backend = "hatchling.build"
 [project]
 name = "anupalan"
 version = "0.1.0"
-description = "Multilingual, Citation-Grounded Compliance Navigator for Indian MSMEs (RAG System)"
+description = "Open-source multilingual, zero-hallucination compliance RAG engine for Indian MSMEs in Gujarati, Hindi, Gujlish & English (GST, Section 43B(h), Udyam, DPDP Act 2023 compliant)"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 license = "Apache-2.0"
 authors = [
     { name = "Vedansi Koshiya", email = "vedakoshiya@users.noreply.github.com" },
 ]
 keywords = [
-    "compliance",
     "rag",
-    "indian-msme",
-    "gst",
+    "retrieval-augmented-generation",
+    "indic-nlp",
     "gujarati",
     "hindi",
-    "citation-grounded",
+    "gujlish",
+    "gst",
+    "indian-tax",
+    "msme",
+    "legal-tech",
     "legal-ai",
+    "cbic",
+    "udyam",
+    "section-43b-h",
+    "zero-hallucination",
+    "citation-grounded",
+    "dpdp-act-2023",
+    "pgvector",
+    "fastapi",
+    "india-ai",
+    "compliance-automation",
+    "chartered-accountant",
+    "tax-compliance",
+    "indic-ai",
+    "open-source-ai"
 ]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Financial and Insurance Industry",
     "Intended Audience :: Legal Industry",
+    "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Natural Language :: Gujarati",
+    "Natural Language :: Hindi",
+    "Natural Language :: English",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Office/Business :: Financial :: Accounting",
+    "Operating System :: OS Independent",
 ]
+
+[project.urls]
+"Homepage" = "https://github.com/vedakoshiya/anupalan"
+"Documentation" = "https://github.com/vedakoshiya/anupalan#readme"
+"Repository" = "https://github.com/vedakoshiya/anupalan.git"
+"Bug Tracker" = "https://github.com/vedakoshiya/anupalan/issues"
 
 dependencies = [
     "fastapi>=0.115.0",

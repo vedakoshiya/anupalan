@@ -1,6 +1,7 @@
 # Anupalan (અનુપાલન / अनुपालन)
 
-> **Multilingual, Citation-Grounded Statutory Compliance Navigator for Indian MSMEs**
+> **Multilingual, Citation-Grounded Statutory Compliance Navigator for Indian MSMEs**  
+> *Zero Hallucination • Indic Dialect Understanding (Gujlish/Gu/Hi/En) • DPDP Act 2023 Compliant • 1,400+ QPS*
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12-brightgreen.svg)](https://www.python.org/)
@@ -9,6 +10,12 @@
 [![Hallucination Rate](https://img.shields.io/badge/Numeric%20Hallucinations-0.00%25-brightgreen.svg)](eval/)
 [![Throughput](https://img.shields.io/badge/Throughput-1%2C405%20QPS%20(p95%3A%203.4ms)-blueviolet.svg)](benchmarks/)
 [![DPDP Act 2023](https://img.shields.io/badge/DPDP%20Act%202023-Compliant%20by%20Design-orange.svg)](#-data-privacy--dpdp-act-2023-guarantees)
+[![GitHub Stars](https://img.shields.io/github/stars/vedakoshiya/anupalan?style=social)](https://github.com/vedakoshiya/anupalan)
+
+---
+
+### ⭐ Why Star Anupalan?
+If you believe in **open-source AI for Indian small businesses, multilingual Indic NLP, and zero-hallucination legal technology**, please consider giving this repository a star! It helps more developers, Chartered Accountants, and MSME entrepreneurs discover the project.
 
 ---
 
@@ -226,6 +233,40 @@ python scripts/security_audit.py
 2. **Strict 30-Day Rolling TTL:** Query traces and conversation logs expire and are permanently purged after 30 days.
 3. **Single-Click Right to Erasure:** Users can erase all session data at any time via `DELETE /v1/sessions/{id}` or the web client purge button.
 4. **Data Residency Compliance:** Production architecture is designed for AWS/GCP India regions (`ap-south-1` / `asia-south1`).
+
+---
+
+## 🔍 SEO Keywords & Topics Index
+
+To ensure maximum discoverability across search engines, developer communities, and open-source catalogs:
+
+* **Primary Topics:** `rag`, `indic-nlp`, `gujarati`, `hindi`, `gujlish`, `gst`, `msme`, `legal-tech`, `legal-ai`, `compliance`, `dpdp-act-2023`, `zero-hallucination`, `pgvector`, `fastapi`, `indian-tax`, `cbic-circulars`, `retrieval-augmented-generation`, `open-source-ai`, `textile-industry`, `surat-msme`, `india-ai`.
+* **Search Queries:** *Indian tax compliance AI*, *GST Job Work 5% Notification CBIC*, *Section 43B(h) MSME 45 days payment rule*, *Multilingual RAG Indic NLP*, *Zero hallucination LLM guardrails*, *Gujarat MSME capital subsidy eligibility*, *Composition scheme turnover threshold 1.5 crore*, *DPDP Act 2023 compliant AI architecture*.
+
+---
+
+## 📚 Academic & Software Citation
+
+If you use **Anupalan** in your research, academic paper, or commercial product, please cite it:
+
+```bibtex
+@software{koshiya2026anupalan,
+  author = {Koshiya, Vedansi},
+  title = {Anupalan: Multilingual, Citation-Grounded Statutory Compliance Navigator for Indian MSMEs},
+  year = {2026},
+  url = {https://github.com/vedakoshiya/anupalan},
+  version = {0.1.0},
+  publisher = {GitHub}
+}
+```
+
+See also [`CITATION.cff`](CITATION.cff) for machine-readable citation metadata.
+
+---
+
+## 🤝 Community & Contributing
+
+Contributions, bug reports, and suggestions are warmly welcomed! Please read our [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`SECURITY.md`](SECURITY.md) guidelines before submitting a pull request.
 
 ---
 
