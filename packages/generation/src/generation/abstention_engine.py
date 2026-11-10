@@ -25,6 +25,22 @@ class AbstentionEngine:
         r"supreme court",
         r"officer viruddh",
         r"court.*appeal",
+        # Foreign tax jurisdictions
+        r"internal revenue service",
+        r"\birs\b",
+        r"form 1040",
+        r"schedule c",
+        r"\bhmrc\b",
+        # Illegal tax evasion and fraud
+        r"evade",
+        r"fake invoice",
+        r"bogus invoice",
+        r"fabricat",
+        # Unrelated non-statutory queries
+        r"recipe",
+        r"dhokla",
+        r"cricket",
+        r"weather",
     ]
 
     INJECTION_PATTERNS = [
