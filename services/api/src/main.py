@@ -33,6 +33,7 @@ from packages.query.src.query.transliteration_normalizer import TransliterationN
 from packages.retrieval.src.retrieval.hybrid_retriever import HybridRetriever
 from services.api.src.metrics import PrometheusMetricsCollector
 from services.api.src.telemetry import AuditLogStore, PIIScrubber
+from services.db.connection import DatabaseManager
 from services.ingestion.src.chunker import StatutoryChunk, StructureAwareChunker
 from services.ingestion.src.version_graph import (
     InstrumentNode,
@@ -53,10 +54,11 @@ FEEDBACK_DB: list[dict[str, Any]] = []
 VERSION_GRAPH = LegalVersionGraph()
 CORPUS_LAST_UPDATED = date(2026, 10, 26)
 
-# Operational telemetry, metrics, and query caching
+# Operational telemetry, metrics, database manager, and query caching
 audit_store = AuditLogStore(ttl_days=30)
 metrics_collector = PrometheusMetricsCollector()
 query_cache = ComplianceQueryCache(max_size=10000, ttl_seconds=3600)
+db_manager = DatabaseManager()
 
 
 class AdminTakedownRequest(BaseModel):
@@ -165,14 +167,18 @@ def get_retriever() -> HybridRetriever:
 
 @app.get("/v1/health")
 def health_check():
-    """Returns liveness, corpus status, and indexed entity counts."""
+    """Returns liveness, corpus status, database health, and indexed entity counts."""
     start_t = time.time()
+    db_health = db_manager.ping()
     res = {
         "status": "healthy",
         "corpus_updated": CORPUS_LAST_UPDATED.isoformat(),
         "indexed_chunks": len(CHUNKS_DB),
         "indexed_instruments": len(VERSION_GRAPH.nodes),
         "audit_logs_count": audit_store.count(),
+        "database_backend": db_health.backend,
+        "database_connected": db_health.connected,
+        "database_url": db_health.url_redacted,
         "version": "0.1.0",
     }
     metrics_collector.record_request("GET", "/v1/health", 200, time.time() - start_t)
