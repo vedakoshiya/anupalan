@@ -490,3 +490,21 @@ def serve_ui():
         "message": "Web UI index.html not yet initialized.",
         "api_docs": "/docs",
     }
+
+
+@app.get("/styles.css", include_in_schema=False)
+def serve_css():
+    """Serves root stylesheet for direct root UI requests."""
+    css_file = WEB_DIR / "styles.css"
+    if css_file.exists():
+        return FileResponse(css_file, media_type="text/css")
+    raise HTTPException(status_code=404)
+
+
+@app.get("/app.js", include_in_schema=False)
+def serve_js():
+    """Serves root JavaScript bundle for direct root UI requests."""
+    js_file = WEB_DIR / "app.js"
+    if js_file.exists():
+        return FileResponse(js_file, media_type="application/javascript")
+    raise HTTPException(status_code=404)

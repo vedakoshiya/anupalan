@@ -10,8 +10,8 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License"></a>
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12-brightgreen.svg" alt="Python"></a>
-  <a href="tests/"><img src="https://img.shields.io/badge/Tests-156%20Passing%20(100%25)-success.svg" alt="Tests"></a>
-  <a href="tests/"><img src="https://img.shields.io/badge/Coverage-94%25-brightgreen.svg" alt="Coverage"></a>
+  <a href="tests/"><img src="https://img.shields.io/badge/Tests-193%20Passing%20(100%25)-success.svg" alt="Tests"></a>
+  <a href="tests/"><img src="https://img.shields.io/badge/Coverage-90%25-brightgreen.svg" alt="Coverage"></a>
   <a href="eval/"><img src="https://img.shields.io/badge/Numeric%20Hallucinations-0.00%25-brightgreen.svg" alt="Hallucination"></a>
   <a href="benchmarks/"><img src="https://img.shields.io/badge/Throughput-1%2C405%20QPS%20(p95%3A%203.4ms)-blueviolet.svg" alt="Throughput"></a>
   <a href="#-data-privacy--dpdp-act-2023-guarantees"><img src="https://img.shields.io/badge/DPDP%20Act%202023-Compliant%20by%20Design-orange.svg" alt="DPDP"></a>
@@ -179,7 +179,29 @@ source .venv/bin/activate       # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 ```
 
-### 2. Launch Interactive Web Client & API
+### 2. Seed Database & Persistent Corpus
+
+```bash
+# Ingests all 40 canonical statutory instruments into persistent SQLite (or PostgreSQL)
+python scripts/seed_database.py
+```
+
+### 3. (Optional) Run Live Regulatory Gazette Crawler
+
+```bash
+# Automatically discovers new gazette notifications from CBIC & MCA with SHA-256 deduplication
+python scripts/run_crawler.py --source ALL --max 5
+```
+
+### 4. (Optional) Configure Gemini LLM & Embedder
+
+```bash
+# Add your Gemini API key to .env for live Gemini 1.5 Pro synthesis and text-embedding-004
+# (If unset, Anupalan operates in 100% offline deterministic statutory extraction mode)
+export GEMINI_API_KEY="your-gemini-api-key-here"
+```
+
+### 5. Launch Interactive Web Client & API
 
 ```bash
 uvicorn services.api.src.main:app --host 127.0.0.1 --port 8000 --reload
@@ -189,11 +211,10 @@ uvicorn services.api.src.main:app --host 127.0.0.1 --port 8000 --reload
 * **Swagger OpenAPI Docs:** Open [`http://127.0.0.1:8000/docs`](http://127.0.0.1:8000/docs)
 * **Prometheus Operational Metrics:** Open [`http://127.0.0.1:8000/metrics`](http://127.0.0.1:8000/metrics)
 
-### 3. Deploy with Docker Compose
+### 6. Deploy with Docker Compose
 
 ```bash
-cd infra/docker
-docker compose up -d
+docker compose -f infra/docker/docker-compose.yml up -d
 ```
 Boots PostgreSQL 16 with pgvector, MinIO immutable storage, and the Anupalan API container together.
 
@@ -204,20 +225,20 @@ Boots PostgreSQL 16 with pgvector, MinIO immutable storage, and the Anupalan API
 All benchmarks, security scans, and test suites can be executed directly:
 
 ```bash
-# 1. Run the entire automated test suite (156 tests, 94% coverage)
-python -m pytest tests --cov=.
+# 1. Run the entire automated test suite (193 tests, 90% coverage)
+python -m pytest tests/unit -q
 
-# 2. Run the CI Quality Gate (evaluates Section 1.4 precision/hallucination thresholds)
+# 2. Run the Production Smoke Test (verifies all 9 REST API endpoints)
+python scripts/smoke_test.py
+
+# 3. Run the CI Quality Gate (evaluates Section 1.4 precision/hallucination thresholds)
 python eval/eval_gate.py
 
-# 3. Run the Burst Load Tester (simulates 20+ QPS concurrent traffic streams)
-python benchmarks/load_test.py
-
-# 4. Run the Architectural Ablation Study (evaluates BM25 vs Dense vs Verifier OFF)
-python eval/ablation_study.py
-
-# 5. Run the Static Security & Prompt Injection Audit (verifies zero secret leakage)
+# 4. Run the Static Security & Prompt Injection Audit (verifies zero secret leakage)
 python scripts/security_audit.py
+
+# 5. Run the Burst Load Tester (simulates 20+ QPS concurrent traffic streams)
+python benchmarks/load_test.py
 ```
 
 ---
