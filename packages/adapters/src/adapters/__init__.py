@@ -1,5 +1,14 @@
 """Adapter interfaces and concrete implementations for Anupalan."""
 
+from packages.adapters.src.adapters.factory import (
+    get_embedder_adapter,
+    get_llm_adapter,
+)
+from packages.adapters.src.adapters.gemini_adapter import (
+    GeminiAPIError,
+    GeminiEmbedderAdapter,
+    GeminiLLMAdapter,
+)
 from packages.adapters.src.adapters.interfaces import (
     BaseEmbedderAdapter,
     BaseLLMAdapter,
@@ -22,4 +31,9 @@ __all__ = [
     "OCRExtractedPage",
     "LocalMultilingualEmbedder",
     "LocalCrossEncoderReranker",
+    "GeminiLLMAdapter",
+    "GeminiEmbedderAdapter",
+    "GeminiAPIError",
+    "get_llm_adapter",
+    "get_embedder_adapter",
 ]

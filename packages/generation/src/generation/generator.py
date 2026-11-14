@@ -4,6 +4,8 @@ Coordinates prompt assembly, structured claim synthesis, citation verification,
 numeric guardrail assertions, and safety abstentions (Spec Section 7 & 8).
 """
 
+import asyncio
+import concurrent.futures
 from datetime import date
 from typing import Any
 from uuid import UUID, uuid4
@@ -91,13 +93,49 @@ class ComplianceGenerator:
             effective_from=top_chunk.effective_from,
         )
 
-        # 3. Plain language synthesis based on language
-        if lang_key == "gu":
-            summary = f"સત્તાવાર પરિપત્ર ({top_chunk.instrument_title}) મુજબ: {top_chunk.text}"
-        elif lang_key == "hi":
-            summary = f"आधिकारिक अधिसूचना ({top_chunk.instrument_title}) के अनुसार: {top_chunk.text}"
-        else:
-            summary = f"According to official statutory provisions in {top_chunk.instrument_title}: {top_chunk.text}"
+        # 3. LLM synthesis with deterministic fallback
+        summary: str | None = None
+        if self.llm_adapter is not None:
+            try:
+                prompt_dict = self.prompt_builder.build_prompt_payload(
+                    query=query,
+                    as_of=as_of,
+                    language=lang_key,
+                    chunks=[cand.chunk for cand in candidates[:3]],
+                )
+
+                def _call_llm() -> str:
+                    return asyncio.run(
+                        self.llm_adapter.generate_text(
+                            system_prompt=prompt_dict["system"],
+                            user_message=prompt_dict["user"],
+                            temperature=0.0,
+                        )
+                    )
+
+                try:
+                    loop = asyncio.get_running_loop()
+                except RuntimeError:
+                    loop = None
+
+                if loop is not None and loop.is_running():
+                    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                        summary_text = pool.submit(_call_llm).result(timeout=15.0)
+                else:
+                    summary_text = _call_llm()
+
+                if summary_text and len(summary_text.strip()) > 10:
+                    summary = summary_text.strip()
+            except Exception:
+                summary = None
+
+        if summary is None:
+            if lang_key == "gu":
+                summary = f"સત્તાવાર પરિપત્ર ({top_chunk.instrument_title}) મુજબ: {top_chunk.text}"
+            elif lang_key == "hi":
+                summary = f"आधिकारिक अधिसूचना ({top_chunk.instrument_title}) के अनुसार: {top_chunk.text}"
+            else:
+                summary = f"According to official statutory provisions in {top_chunk.instrument_title}: {top_chunk.text}"
 
         claims = [
             Claim(
