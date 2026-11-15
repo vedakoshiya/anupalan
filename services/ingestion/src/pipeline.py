@@ -55,16 +55,16 @@ class IngestionPipeline:
         content_hash = LocalImmutableStorage.compute_sha256(data)
 
         # 1. Deduplication check (FR-007)
-        if not force_reindex and content_hash in self.ingestion_history:
-            prev_result = self.ingestion_history[content_hash]
+        if not force_reindex and (content_hash in self.ingestion_history or self.storage.exists(content_hash)):
+            prev_result = self.ingestion_history.get(content_hash)
             return IngestionResult(
-                document_id=prev_result.document_id,
+                document_id=prev_result.document_id if prev_result else uuid4(),
                 filename=filename,
                 content_hash=content_hash,
                 status=IngestionStatus.SKIPPED_DUPLICATE,
                 chunks_created=0,
-                quality_score=prev_result.quality_score,
-                flagged_pages=prev_result.flagged_pages,
+                quality_score=prev_result.quality_score if prev_result else 1.0,
+                flagged_pages=prev_result.flagged_pages if prev_result else [],
             )
 
         # 2. Store raw artifact immutably (FR-008)

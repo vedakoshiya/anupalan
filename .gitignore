@@ -85,6 +85,8 @@ data/ocr_cache/*
 !data/ocr_cache/.gitkeep
 data/embeddings_cache/*
 !data/embeddings_cache/.gitkeep
+data/documents/*
+!data/documents/.gitkeep
 
 # Local database instances & exports
 *.sqlite3

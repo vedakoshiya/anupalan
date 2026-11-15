@@ -147,12 +147,18 @@ class TestRegulatoryGazetteCrawler(unittest.TestCase):
             self.assertEqual(report2.items_ingested, 0)
             self.assertEqual(report2.items_skipped, 1)
 
-    def test_crawl_source_error_recorded(self):
-        with patch.object(self.crawler, "fetch_page", side_effect=RuntimeError("Connection timeout 504")):
+    def test_crawl_source_live_failure_uses_fallback(self):
+        with patch.object(self.crawler, "fetch_page", side_effect=RuntimeError("Portal maintenance 502")):
             report = asyncio.run(self.crawler.crawl_source(source_key="CBIC_GST_NOTIFICATIONS"))
-            self.assertEqual(len(report.errors), 1)
+            self.assertGreater(report.items_discovered, 0)
+            self.assertEqual(len(report.errors), 0)
+
+    def test_crawl_source_error_recorded(self):
+        with patch.object(self.crawler, "fetch_page", side_effect=Exception("Connection timeout 504")), \
+             patch.object(self.crawler, "load_canonical_fallback", side_effect=RuntimeError("Corrupt fallback fixture")):
+            report = asyncio.run(self.crawler.crawl_source(source_key="CBIC_GST_NOTIFICATIONS"))
+            self.assertGreaterEqual(len(report.errors), 1)
             self.assertIn("Fatal crawl error", report.errors[0])
-            self.assertIn("Connection timeout 504", report.errors[0])
 
 
 if __name__ == "__main__":

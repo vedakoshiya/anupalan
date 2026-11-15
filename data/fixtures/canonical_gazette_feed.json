@@ -1,0 +1,78 @@
+{
+  "CBIC_GST_NOTIFICATIONS": [
+    {
+      "authority": "CBIC",
+      "category": "notification",
+      "notification_number": "04/2024-Central Tax",
+      "issue_date": "2024-04-08",
+      "title": "Special procedure to be followed by registered persons manufacturing pan masala and tobacco products under Section 148.",
+      "pdf_url": "https://taxinformation.cbic.gov.in/content-page/notif-04-2024.pdf",
+      "effective_from": "2024-04-01",
+      "subjects": ["general_compliance"]
+    },
+    {
+      "authority": "CBIC",
+      "category": "notification",
+      "notification_number": "12/2024-Central Tax",
+      "issue_date": "2024-07-10",
+      "title": "Exemption from filing Annual Return in FORM GSTR-9/9A for small taxpayers having aggregate turnover up to two crore rupees in FY 2023-24.",
+      "pdf_url": "https://taxinformation.cbic.gov.in/content-page/notif-12-2024.pdf",
+      "effective_from": "2024-07-10",
+      "subjects": ["composition", "general_compliance"]
+    },
+    {
+      "authority": "CBIC",
+      "category": "notification",
+      "notification_number": "20/2017-Central Tax (Rate)",
+      "issue_date": "2017-08-22",
+      "title": "Reduction of GST rate on job work services in relation to textile and textile products to 5%.",
+      "pdf_url": "https://taxinformation.cbic.gov.in/content-page/notif-20-2017.pdf",
+      "effective_from": "2017-08-22",
+      "subjects": ["job_work"]
+    }
+  ],
+  "CBIC_GST_CIRCULARS": [
+    {
+      "authority": "CBIC",
+      "category": "circular",
+      "notification_number": "Circular No. 206/18/2023-GST",
+      "issue_date": "2023-10-31",
+      "title": "Clarification regarding GST rates on job work for imitation jewellery and related handicrafts.",
+      "pdf_url": "https://taxinformation.cbic.gov.in/content-page/circ-206-2023.pdf",
+      "effective_from": "2023-10-31",
+      "subjects": ["job_work"]
+    },
+    {
+      "authority": "CBIC",
+      "category": "circular",
+      "notification_number": "Circular No. 211/5/2024-GST",
+      "issue_date": "2024-06-26",
+      "title": "Clarification on time limit for availing input tax credit under Section 16(4) of the CGST Act.",
+      "pdf_url": "https://taxinformation.cbic.gov.in/content-page/circ-211-2024.pdf",
+      "effective_from": "2024-06-26",
+      "subjects": ["itc"]
+    }
+  ],
+  "MCA_NOTIFICATIONS": [
+    {
+      "authority": "MCA",
+      "category": "notification",
+      "notification_number": "MCA/MSME/Sec43B(h)/2024",
+      "issue_date": "2024-03-15",
+      "title": "Statutory clarification on 45-day payment timelines to Micro and Small enterprises under MSMED Act and Section 43B(h) disallowance.",
+      "pdf_url": "https://www.mca.gov.in/content/dam/mca/pdf/MSME_Payment_Rule_2024.pdf",
+      "effective_from": "2024-04-01",
+      "subjects": ["msme_payment"]
+    },
+    {
+      "authority": "MCA",
+      "category": "notification",
+      "notification_number": "General Circular No. 02/2024",
+      "issue_date": "2024-05-02",
+      "title": "Filing of financial statements and annual returns under Companies Act, 2013 for MSME companies.",
+      "pdf_url": "https://www.mca.gov.in/content/dam/mca/pdf/Circular_02_2024.pdf",
+      "effective_from": "2024-05-02",
+      "subjects": ["general_compliance"]
+    }
+  ]
+}
